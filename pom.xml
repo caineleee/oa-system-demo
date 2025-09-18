@@ -1,65 +1,105 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Maven项目对象模型 (POM) -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <!-- 模型版本 -->
     <modelVersion>4.0.0</modelVersion>
 
+    <!-- 父项目配置，继承Spring Boot的默认配置 -->
     <parent>
+        <!-- 父项目组织ID -->
         <groupId>org.springframework.boot</groupId>
+        <!-- 父项目ID -->
         <artifactId>spring-boot-starter-parent</artifactId>
+        <!-- 父项目版本 -->
         <version>2.7.17</version>
+        <!-- 父项目POM的相对路径 -->
         <relativePath/>
     </parent>
 
+    <!-- 当前项目组织ID -->
     <groupId>com.lee.oa</groupId>
+    <!-- 当前项目ID -->
     <artifactId>oa-system</artifactId>
+    <!-- 当前项目版本 -->
     <version>1.0-SNAPSHOT</version>
+    <!-- 项目打包方式，pom表示这是一个聚合项目 -->
     <packaging>pom</packaging>
 
+    <!-- 子模块列表 -->
     <modules>
+        <!-- oa-server模块 -->
         <module>oa-server</module>
     </modules>
 
+    <!-- 项目属性配置 -->
     <properties>
+        <!-- Maven编译器源码版本 -->
         <maven.compiler.source>17</maven.compiler.source>
+        <!-- Maven编译器目标版本 -->
         <maven.compiler.target>17</maven.compiler.target>
+        <!-- 项目构建源码编码 -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- Java版本 -->
         <java.version>17</java.version>
     </properties>
 
+    <!-- 仓库配置 -->
+    <repositories>
+        <!-- 阿里云Maven仓库 -->
+        <repository>
+            <id>aliyun</id>
+            <url>https://maven.aliyun.com/repository/public</url>
+        </repository>
+        <!-- Spring官方发布仓库 -->
+        <repository>
+            <id>spring-releases</id>
+            <url>https://repo.spring.io/release</url>
+        </repository>
+    </repositories>
+
+    <!-- 项目依赖 -->
     <dependencies>
+        <!-- Spring Boot Web启动器 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
+        <!-- Spring Boot Security启动器 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
         <!-- 移除Spring Data JPA依赖，添加MyBatis Plus依赖 -->
+        <!-- MyBatis Plus启动器 -->
         <dependency>
             <groupId>com.baomidou</groupId>
             <artifactId>mybatis-plus-boot-starter</artifactId>
             <version>3.5.3.1</version>
         </dependency>
         <!-- JWT -->
+        <!-- JWT API依赖 -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-api</artifactId>
             <version>0.11.5</version>
         </dependency>
+        <!-- JWT实现依赖 -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-impl</artifactId>
             <version>0.11.5</version>
             <scope>runtime</scope>
         </dependency>
+        <!-- JWT Jackson依赖 -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-jackson</artifactId>
             <version>0.11.5</version>
             <scope>runtime</scope>
         </dependency>
+        <!-- MySQL驱动 -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
@@ -67,23 +107,26 @@
             <scope>runtime</scope>
         </dependency>
         <!-- Swagger2 -->
+        <!-- Swagger2核心依赖 -->
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger2</artifactId>
             <version>3.0.0</version>
         </dependency>
+        <!-- Swagger UI依赖 -->
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-swagger-ui</artifactId>
             <version>3.0.0</version>
         </dependency>
 
+        <!-- Spring Boot测试启动器 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-        <!-- Lombok -->
+        <!-- Lombok依赖，用于简化Java代码 -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>

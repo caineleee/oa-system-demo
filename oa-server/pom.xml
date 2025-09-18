@@ -1,24 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Maven项目对象模型 (POM) -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <!-- 模型版本 -->
     <modelVersion>4.0.0</modelVersion>
+    
+    <!-- 父项目配置 -->
     <parent>
+        <!-- 父项目组织ID -->
         <groupId>com.lee.oa</groupId>
+        <!-- 父项目ID -->
         <artifactId>oa-system</artifactId>
+        <!-- 父项目版本 -->
         <version>1.0-SNAPSHOT</version>
     </parent>
 
+    <!-- 当前模块的artifactId -->
     <artifactId>oa-server</artifactId>
 
+    <!-- 项目属性配置 -->
     <properties>
+        <!-- Maven编译器源码版本 -->
         <maven.compiler.source>17</maven.compiler.source>
+        <!-- Maven编译器目标版本 -->
         <maven.compiler.target>17</maven.compiler.target>
+        <!-- 项目构建源码编码 -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <build>
+        <!-- 插件列表 -->
         <plugins>
+            <!-- Spring Boot Maven插件 -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>

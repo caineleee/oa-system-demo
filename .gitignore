@@ -1,52 +1,88 @@
 # --- IntelliJ IDEA 相关 ---
 .idea/
+# IDEA模块文件
 *.iml
+# IDEA工作区文件
 *.iws
+# IDEA项目文件
 *.ipr
+# IDEA输出目录
 out/
 
-# --- Maven 相关 ---
+# Maven 相关文件
+# Maven编译输出目录
 target/
+# Maven标签文件
 pom.xml.tag
+# Maven发布备份文件
 pom.xml.releaseBackup
+# Maven版本备份文件
 pom.xml.versionsBackup
+# Maven下一个版本文件
 pom.xml.next
+# 发布属性文件
 release.properties
+# 依赖简化POM文件
 dependency-reduced-pom.xml
+# 构建号属性文件
 buildNumber.properties
+# Maven包装器定时属性文件
 .mvn/timing.properties
+# Maven包装器JAR文件
 .mvn/wrapper/maven-wrapper.jar
 
-# --- 操作系统/编辑器临时文件 ---
+# 操作系统/编辑器临时文件
+# 日志文件
 *.log
+# 交换文件
 *.swp
+# 备份文件
 *.bak
+# Word临时文件
 ~$*
+# macOS系统文件
 .DS_Store
+# Windows缩略图缓存
 Thumbs.db
 
-# --- Spring Boot 相关 ---
+# Spring Boot 相关文件
+# 应用配置文件（排除在忽略列表中）
 !src/main/resources/application*.properties
 !src/main/resources/application*.yml
+# JAR文件
 *.jar
+# WAR文件
 *.war
+# EAR文件
 *.ear
 
-# --- 日志文件 ---
+# 日志文件目录
 logs/
+# 日志文件
 *.log
+# 临时文件目录
 tmp/
 
-# --- 测试相关 ---
+# 测试相关文件
+# 测试输出目录
 **/test-output/
+# 测试文件
 *.test
 
-# --- 其他 ---
+# 其他开发工具文件
+# Eclipse设置文件
 .settings/
+# Eclipse项目文件
 .project
+# Eclipse类路径文件
 .classpath
+# Eclipse工厂路径文件
 .factorypath
+# Spring Beans配置文件
 .springBeans
+# 环境变量文件
 .env
+# VS Code配置目录
 .vscode/
+# IDEA配置目录
 /.idea/

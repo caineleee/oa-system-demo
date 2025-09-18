@@ -44,6 +44,11 @@
 
 默认用户: admin/admin
 
+## 日志配置
+
+项目使用 Logback 作为日志框架，配置文件位于 `oa-server/src/main/resources/logback-spring.xml`。
+日志将输出到控制台和文件中，默认日志文件位于项目根目录的 logs 文件夹下。
+
 ## Git 推送问题解决
 
 如果您在推送代码到 GitHub 时遇到 SSH 密钥问题，请参考 `GIT_SSH解决方案.md` 文件中的详细解决方案。
