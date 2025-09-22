@@ -51,3 +51,14 @@ logging:
     com.lee.oa: DEBUG
     # MyBatis日志级别
     org.mybatis: DEBUG
+
+# JWT配置
+jwt:
+  # JWT 密钥存储请求头
+  token-header: Authorization
+  # 密钥前缀
+  token-start: Bearer
+  # 密钥字符串
+  token-secret: oa-system-secret-key-development
+  # 密钥过期时间，单位秒(24 小时)
+  token-expire-time: 86400

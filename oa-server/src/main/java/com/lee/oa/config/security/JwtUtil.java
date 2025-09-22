@@ -1,8 +1,7 @@
-package com.lee.oa.util;
+package com.lee.oa.config.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -30,10 +29,10 @@ public class JwtUtil implements Serializable {
     private static final String CLAIM_KEY_CREATED = "created";
 
     @Value("${jwt.token-secret}")
-    private static String tokenSecret;
+    private String tokenSecret;
 
     @Value("${jwt.token-expire-time}")
-    private static long tokenExpireTime;
+    private long tokenExpireTime;
 
 
     /**
@@ -45,8 +44,18 @@ public class JwtUtil implements Serializable {
      * 构造函数，初始化签名密钥
      */
     public JwtUtil() {
-        // 根据密钥字符串生成签名密钥
-        this.signKey = Keys.hmacShaKeyFor(tokenSecret.getBytes(StandardCharsets.UTF_8));
+        // 注意：在构造函数中不能直接使用tokenSecret，因为Spring尚未完成属性注入
+        // 签名密钥将在首次使用时初始化
+    }
+    
+    /**
+     * 初始化签名密钥
+     */
+    private void initSignKey() {
+        if (this.signKey == null) {
+            // 根据密钥字符串生成签名密钥
+            this.signKey = Keys.hmacShaKeyFor(tokenSecret.getBytes(StandardCharsets.UTF_8));
+        }
     }
 
 
@@ -57,6 +66,8 @@ public class JwtUtil implements Serializable {
      * @return JWT令牌
      */
     public String generateToken(UserDetails userDetails) {
+        // 确保签名密钥已初始化
+        initSignKey();
         // 创建声明映射
         Map<String, Object> claims = new HashMap<>();
         claims.put(CLAIM_KEY_USERNAME, userDetails.getUsername());
@@ -76,6 +87,8 @@ public class JwtUtil implements Serializable {
      * @return 验证结果
      */
     public Boolean validateToken(String token, UserDetails userDetails) {
+        // 确保签名密钥已初始化
+        initSignKey();
         // 从令牌中提取用户名
         String username = getUsernameFromToken(token);
         // 验证用户名是否匹配且令牌未过期
@@ -91,6 +104,8 @@ public class JwtUtil implements Serializable {
      * @return 用户名
      */
     public String getUsernameFromToken(String token) {
+        // 确保签名密钥已初始化
+        initSignKey();
         // 从令牌中获取主题声明（用户名）
         return getClaimFromToken(token, Claims::getSubject);
     }
@@ -103,6 +118,8 @@ public class JwtUtil implements Serializable {
      * @return 是否可以刷新令牌
      */
     public boolean canRefresh(String token) {
+        // 确保签名密钥已初始化
+        initSignKey();
         return !isTokenExpired(token);
     }
 
@@ -113,6 +130,8 @@ public class JwtUtil implements Serializable {
      * @return 新的令牌
      */
     public String refreshToken(String token) {
+        // 确保签名密钥已初始化
+        initSignKey();
         Claims claims = getAllClaimsFromToken(token);
         claims.put(CLAIM_KEY_CREATED, new Date());
         return doGenerateToken(claims);
@@ -126,6 +145,8 @@ public class JwtUtil implements Serializable {
      * @return 是否过期
      */
     private Boolean isTokenExpired(String token) {
+        // 确保签名密钥已初始化
+        initSignKey();
         // 获取令牌的过期时间
         Date expiration = getExpirationDateFromToken(token);
         // 检查过期时间是否在当前时间之前
@@ -152,6 +173,8 @@ public class JwtUtil implements Serializable {
      * @return 声明值
      */
     private  <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
+        // 确保签名密钥已初始化
+        initSignKey();
         // 从令牌中获取所有声明
         final Claims claims = getAllClaimsFromToken(token);
         // 应用解析器函数并返回结果
@@ -165,6 +188,8 @@ public class JwtUtil implements Serializable {
      * @return 声明对象
      */
     private Claims getAllClaimsFromToken(String token) {
+        // 确保签名密钥已初始化
+        initSignKey();
         // 创建JWT解析器构建器
         return Jwts.parserBuilder()
                 // 设置签名密钥
@@ -184,6 +209,8 @@ public class JwtUtil implements Serializable {
      * @return JWT令牌
      */
     private String doGenerateToken(Map<String, Object> claims) {
+        // 确保签名密钥已初始化
+        initSignKey();
         // 使用JWT构建器创建令牌
         return Jwts.builder()
                 // 设置声明

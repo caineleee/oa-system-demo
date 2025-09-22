@@ -1,9 +1,9 @@
 package com.lee.oa.config.security;
 
-import com.lee.oa.service.UserDetailsServiceImpl;
-import com.lee.oa.util.JwtUtil;
-import io.jsonwebtoken.ExpiredJwtException;
+import com.lee.oa.service.UserService;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,17 +26,20 @@ import java.io.IOException;
 @Component
 public class JwtRequestFilter extends OncePerRequestFilter {
 
-    /**
-     * 用户详情服务实现类
-     */
     @Autowired
-    private UserDetailsServiceImpl userDetailsService;
+    private UserService userService;
 
     /**
      * JWT工具类
      */
     @Autowired
     private JwtUtil jwtUtil;
+
+    @Value("${jwt.token-start}")
+    private String tokenStart;
+
+    @Value("${jwt.token-header}")
+    private String tokenHeader;
 
     /**
      * 过滤请求并验证JWT令牌
@@ -52,50 +55,33 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain chain) throws ServletException, IOException {
         // 从请求头中获取Authorization字段
-        final String requestTokenHeader = request.getHeader("Authorization");
-
-        String username = null;
-        String jwtToken = null;
+        String requestTokenHeader = request.getHeader(tokenHeader);
 
         // JWT Token的格式为"Bearer token"，因此要提取实际的token
-        if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
+        if (requestTokenHeader != null && requestTokenHeader.startsWith(tokenStart)) {
             // 提取JWT令牌（去掉"Bearer "前缀）
-            jwtToken = requestTokenHeader.substring(7);
-            try {
-                // 从JWT令牌中提取用户名
-                username = jwtUtil.getUsernameFromToken(jwtToken);
-            } catch (IllegalArgumentException e) {
-                // 无法获取JWT令牌时的处理
-                System.out.println("Unable to get JWT Token");
-            } catch (ExpiredJwtException e) {
-                // JWT令牌过期时的处理
-                System.out.println("JWT Token has expired");
-            }
-        } else {
-            // JWT令牌不是以Bearer开头时记录警告日志
-            logger.warn("JWT Token does not begin with Bearer String");
-        }
+            String jwtToken = requestTokenHeader.substring(tokenStart.length());
+            String username = jwtUtil.getUsernameFromToken(jwtToken);
 
-        // 验证token
-        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-            // 根据用户名加载用户详情
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-
-            // 验证JWT令牌是否有效
-            if (jwtUtil.validateToken(jwtToken, userDetails.getUsername())) {
-                // 创建用户名密码认证令牌
-                UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                        // 设置用户详情
-                        userDetails, 
-                        // 设置凭证为null
-                        null, 
-                        // 设置用户权限
-                        userDetails.getAuthorities());
-                // 设置认证详情
-                authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                // 将认证信息设置到安全上下文中
-                SecurityContextHolder.getContext().setAuthentication(authToken);
+            // Token 存在但是未登录
+            if (jwtToken != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetails = userService.loadUserByUsername(username);
+                if (userDetails != null && jwtUtil.validateToken(jwtToken, userDetails)) {
+                    // 创建用户名密码认证令牌
+                    UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
+                            // 获取用户详情
+                            userDetails,
+                            // 获取凭证(密码)为null
+                            null,
+                            // 获取用户权限
+                            userDetails.getAuthorities());
+                    // 设置认证详情
+                    authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    // 将认证信息设置到安全上下文中
+                    SecurityContextHolder.getContext().setAuthentication(authToken);
+                }
             }
+
         }
         // 继续执行过滤器链
         chain.doFilter(request, response);

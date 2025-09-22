@@ -79,5 +79,18 @@ public class SwaggerConfig implements WebMvcConfigurer {
         // 将/webjars/**映射到classpath下的META-INF/resources/webjars目录
         registry.addResourceHandler("/webjars/**")
                 .addResourceLocations("classpath:/META-INF/resources/webjars/");
+                
+        // 添加Swagger资源配置
+        registry.addResourceHandler("/swagger-resources/**")
+                .addResourceLocations("classpath:/META-INF/resources/swagger-resources/");
+                
+        registry.addResourceHandler("/v2/api-docs")
+                .addResourceLocations("classpath:/META-INF/resources/");
+                
+        registry.addResourceHandler("/swagger-resources/configuration/ui")
+                .addResourceLocations("classpath:/META-INF/resources/swagger-resources/configuration/ui/");
+                
+        registry.addResourceHandler("/swagger-resources/configuration/security")
+                .addResourceLocations("classpath:/META-INF/resources/swagger-resources/configuration/security/");
     }
 }
