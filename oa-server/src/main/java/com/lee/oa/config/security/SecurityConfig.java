@@ -59,7 +59,6 @@ public class SecurityConfig {
         };
     }
 
-    @Bean
     public void configureAuthenticationManager(AuthenticationManagerBuilder auth) throws Exception {
         // 设置用户详情服务和密码编码器
         auth.userDetailsService(userDetailsService()).passwordEncoder(new BCryptPasswordEncoder());
