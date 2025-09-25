@@ -8,6 +8,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -66,7 +67,7 @@ public class SecurityConfig {
 
 
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http, JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
                 // 禁用CSRF保护
                 .csrf().disable()
@@ -75,13 +76,6 @@ public class SecurityConfig {
                 .and()
                 .authorizeRequests()
                 .antMatchers("/authenticate", "/hello", "/login", "/logout").permitAll()
-                .antMatchers("/swagger-ui.html"//,
-//                        "/webjars/**",
-//                        "/swagger-resources/**",
-//                        "/v2/api-docs",
-//                        "/swagger-resources/configuration/ui",
-//                        "/swagger-resources/configuration/security"
-                ).permitAll()
                 .anyRequest().authenticated()
                 .and()
                 .headers().cacheControl().disable()
@@ -94,14 +88,29 @@ public class SecurityConfig {
                 .and().build();
     }
 
-//    /**
-//     * 密码编码器Bean
-//     *
-//     * @return PasswordEncoder 密码编码器
-//     */
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        // 返回BCrypt密码编码器实例
-//        return new BCryptPasswordEncoder();
-//     }
+    /**
+     * 配置WebSecurity以忽略Swagger相关路径,以及其他静态资源路径
+     * 使用新版Spring Security方式，不继承WebSecurityConfigurerAdapter
+     *
+     * @return WebSecurityCustomizer实例
+     */
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring().antMatchers(
+//                "/doc.html",
+//                "/swagger-ui.html",
+                "/swagger-ui/**",
+                "/swagger-resources/**",
+                "/v2/api-docs",
+                "/swagger-resources/configuration/ui",
+                "/swagger-resources/configuration/security",
+                "/webjars/**",
+                "/css/**",
+                "/js/**",
+                "/index.html",
+                "/favicon.ico",
+                "/error"
+        );
+    }
+
 }

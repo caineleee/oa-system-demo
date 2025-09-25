@@ -1,7 +1,7 @@
 # 服务器配置
 server:
   # 服务端口
-  port: 8080
+  port: 8081
 
 # Spring框架配置
 spring:
@@ -22,6 +22,10 @@ spring:
       schema-locations: classpath:schema.sql
       # 初始化模式，always表示总是执行
       mode: always
+  # 解决Springfox与Spring Boot 2.6+兼容性问题
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
 
 # MyBatis Plus 配置
 mybatis-plus:
@@ -62,3 +66,9 @@ jwt:
   token-secret: oa-system-secret-key-development
   # 密钥过期时间，单位秒(24 小时)
   token-expire-time: 86400
+
+# 解决Springfox与Spring Boot 2.6+兼容性问题
+springfox:
+  documentation:
+    swagger-ui:
+      base-url: /

@@ -43,6 +43,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- Java版本 -->
         <java.version>17</java.version>
+        <!-- Springfox版本 -->
+        <springfox.version>3.0.0</springfox.version>
     </properties>
 
     <!-- 仓库配置 -->
@@ -106,18 +108,11 @@
             <version>8.0.33</version>
             <scope>runtime</scope>
         </dependency>
-        <!-- Swagger2 -->
-        <!-- Swagger2核心依赖 -->
+        <!-- 使用Springfox Boot Starter替代单独的swagger2和swagger-ui依赖 -->
         <dependency>
             <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-            <version>3.0.0</version>
-        </dependency>
-        <!-- Swagger UI依赖 -->
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger-ui</artifactId>
-            <version>3.0.0</version>
+            <artifactId>springfox-boot-starter</artifactId>
+            <version>${springfox.version}</version>
         </dependency>
 
         <!-- Spring Boot测试启动器 -->

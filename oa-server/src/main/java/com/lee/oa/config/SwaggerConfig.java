@@ -2,7 +2,6 @@ package com.lee.oa.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import springfox.documentation.builders.ApiInfoBuilder;
@@ -17,10 +16,10 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 /**
  * Swagger配置类
  * 用于配置Swagger API文档生成的相关设置
+ * 解决Springfox与Spring Boot 2.7的兼容性问题
  */
 @Configuration
 @EnableSwagger2
-@EnableWebMvc
 public class SwaggerConfig implements WebMvcConfigurer {
 
     /**
@@ -34,7 +33,7 @@ public class SwaggerConfig implements WebMvcConfigurer {
         return new Docket(DocumentationType.SWAGGER_2)
                 // 设置API基本信息
                 .apiInfo(apiInfo())
-                // 开始选择API
+                // 选择哪些接口作为API展示
                 .select()
                 // 指定扫描的包路径
                 .apis(RequestHandlerSelectors.basePackage("com.lee.oa.controller"))
@@ -59,7 +58,7 @@ public class SwaggerConfig implements WebMvcConfigurer {
                 // 设置文档版本
                 .version("1.0")
                 // 设置联系人信息
-                .contact(new Contact("Lee", "", "lee@example.com"))
+                .contact(new Contact("Lee", "http://localhost:8081", "lee@example.com"))
                 // 构建ApiInfo对象
                 .build();
     }
@@ -67,7 +66,7 @@ public class SwaggerConfig implements WebMvcConfigurer {
     /**
      * 添加静态资源处理器
      * 用于处理Swagger UI相关的静态资源
-     * 
+     *
      * @param registry 资源处理器注册器
      */
     @Override
@@ -83,13 +82,13 @@ public class SwaggerConfig implements WebMvcConfigurer {
         // 添加Swagger资源配置
         registry.addResourceHandler("/swagger-resources/**")
                 .addResourceLocations("classpath:/META-INF/resources/swagger-resources/");
-                
+
         registry.addResourceHandler("/v2/api-docs")
                 .addResourceLocations("classpath:/META-INF/resources/");
-                
+
         registry.addResourceHandler("/swagger-resources/configuration/ui")
                 .addResourceLocations("classpath:/META-INF/resources/swagger-resources/configuration/ui/");
-                
+
         registry.addResourceHandler("/swagger-resources/configuration/security")
                 .addResourceLocations("classpath:/META-INF/resources/swagger-resources/configuration/security/");
     }

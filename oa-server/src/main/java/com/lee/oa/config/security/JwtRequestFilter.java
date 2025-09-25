@@ -1,7 +1,6 @@
 package com.lee.oa.config.security;
 
 import com.lee.oa.service.UserService;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
