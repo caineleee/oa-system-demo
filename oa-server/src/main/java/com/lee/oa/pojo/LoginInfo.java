@@ -1,5 +1,6 @@
 package com.lee.oa.pojo;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.AllArgsConstructor;
@@ -21,6 +22,7 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 @ApiModel(value = "用户登录实体类" )
+@TableName("t_user")
 public class LoginInfo {
 
     @ApiModelProperty(value = "用户名", required = true)

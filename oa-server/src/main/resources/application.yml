@@ -16,12 +16,12 @@ spring:
     # 数据库驱动类名
     driver-class-name: com.mysql.cj.jdbc.Driver
   # SQL初始化配置
-  sql:
-    init:
-      # schema脚本位置
-      schema-locations: classpath:schema.sql
-      # 初始化模式，always表示总是执行
-      mode: always
+#  sql:
+#    init:
+#      # schema脚本位置
+#      schema-locations: classpath:schema.sql
+#      # 初始化模式，always表示总是执行
+#      mode: always
   # 解决Springfox与Spring Boot 2.6+兼容性问题
   mvc:
     pathmatch:

@@ -176,7 +176,7 @@ public class JwtUtil implements Serializable {
         // 确保签名密钥已初始化
         initSignKey();
         // 从令牌中获取所有声明
-        final Claims claims = getAllClaimsFromToken(token);
+        Claims claims = getAllClaimsFromToken(token);
         // 应用解析器函数并返回结果
         return claimsResolver.apply(claims);
     }
@@ -189,6 +189,9 @@ public class JwtUtil implements Serializable {
      */
     private Claims getAllClaimsFromToken(String token) {
         // 确保签名密钥已初始化
+        if (token == null || token.isEmpty()) {
+            return null;
+        }
         initSignKey();
         // 创建JWT解析器构建器
         return Jwts.parserBuilder()

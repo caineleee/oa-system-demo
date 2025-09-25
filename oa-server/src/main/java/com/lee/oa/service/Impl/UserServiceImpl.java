@@ -35,18 +35,6 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Autowired
     private UserMapper userMapper;
 
-//    /**
-//     * 用户服务实现类
-//     */
-//    @Autowired
-//    private UserDetailsService userDetailsService;
-
-//    /**
-//     * 密码编码器对象
-//     */
-//    @Autowired
-//    private PasswordEncoder passwordEncoder;
-
     /**
      * JWT 工具类对象
      */
@@ -56,8 +44,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     /**
      * JWT Token 的请求头名称
      */
-    @Value("${jwt.token-header}")
-    private String tokenHeader;
+    @Value("${jwt.token-start}")
+    private String tokenStart;
 
     /**
      * 用户登录验证并生成JWT Token
@@ -81,7 +69,8 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             return Response.error("用户账号被禁用, 请联系管理员");
         }
         // 验证JWT Token是否有效
-        if (!jwtUtil.validateToken(request.getHeader("Authorization"), userDetails)) {
+        if (request.getHeader("Authorization") != null
+                && !jwtUtil.validateToken(request.getHeader("Authorization"), userDetails)) {
             // Token过期时返回错误信息
             return Response.error("Token 已过期, 请重新登录");
         }
@@ -95,7 +84,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         // 生成新的JWT Token
         String token = jwtUtil.generateToken(userDetails);
         // 构造包含token和token头部信息的Map
-        Map<String, String> map = Map.of("token", token, "tokenHead", tokenHeader);
+        Map<String, String> map = Map.of("token", token, "tokenStart", tokenStart);
         // 返回登录成功的响应信息
         return Response.success("登录成功", map);
     }

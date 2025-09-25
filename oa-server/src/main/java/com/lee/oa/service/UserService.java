@@ -25,10 +25,4 @@ public interface UserService extends IService<User>, UserDetailsService {
      */
     Response login(String username, String password, HttpServletRequest request);
 
-//    /**
-//     * 根据用户名获取用户信息
-//     * @param username
-//     * @return
-//     */
-//    User findByUsername(String username);
 }
