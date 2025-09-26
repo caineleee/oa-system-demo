@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.Map;
@@ -49,13 +50,19 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     /**
      * 用户登录验证并生成JWT Token
+     *
      * @param username 用户名
      * @param password 密码
-     * @param request HTTP请求对象
+     * @param code
+     * @param request  HTTP请求对象
      * @return Response 响应结果，包含token信息或错误信息
      */
     @Override
-    public Response login(String username, String password, HttpServletRequest request) {
+    public Response login(String username, String password, String code, HttpServletRequest request) {
+        String captcha = (String) request.getSession().getAttribute("captcha");
+        if (captcha.isEmpty() || !captcha.equalsIgnoreCase(code)) {
+            return Response.error("验证码错误, 请重新输入");
+        }
         // 通过用户名加载用户详细信息
         UserDetails userDetails = loadUserByUsername(username);
         // 验证用户是否存在或密码是否正确

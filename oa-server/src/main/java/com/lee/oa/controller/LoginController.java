@@ -32,7 +32,7 @@ public class LoginController {
     @ApiOperation("用户登录")
     @PostMapping("/login")
     public Response login(@RequestBody LoginInfo info, HttpServletRequest  request) {
-        return userService.login(info.getUsername(), info.getPassword(), request);
+        return userService.login(info.getUsername(), info.getPassword(), info.getCode(), request);
     }
 
     @ApiOperation("用户退出登录")

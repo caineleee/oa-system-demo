@@ -106,7 +106,7 @@ public class SecurityConfig {
                 "/js/**",
                 "/index.html",
                 "/favicon.ico",
-                "/error"
+                "/captcha"
         );
     }
 

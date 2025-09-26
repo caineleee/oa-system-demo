@@ -18,11 +18,13 @@ public interface UserService extends IService<User>, UserDetailsService {
 
     /**
      * 登录
-     * @param username
-     * @param password
-     * @param request
-     * @return
+     *
+     * @param username 用户名
+     * @param password 密码
+     * @param code     验证码
+     * @param request  请求对象
+     * @return HTTP 响应对应
      */
-    Response login(String username, String password, HttpServletRequest request);
+    Response login(String username, String password, String code, HttpServletRequest request);
 
 }
