@@ -18,6 +18,7 @@ import java.io.IOException;
 
 /**
  * JWT请求过滤器，用于验证JWT令牌并设置用户认证信息
+ * 该过滤器拦截所有请求，检查请求头中的JWT Token并进行验证
  * 
  * @author Lee
  * @since 1.0.0
@@ -29,20 +30,26 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private UserService userService;
 
     /**
-     * JWT工具类
+     * JWT工具类，用于Token验证和解析
      */
     @Autowired
     private JwtUtil jwtUtil;
 
+    /**
+     * Token前缀，用于识别JWT Token（Bearer）
+     */
     @Value("${jwt.token-start}")
     private String tokenStart;
 
+    /**
+     * Token在请求头中的字段名（如"Authorization"）
+     */
     @Value("${jwt.token-header}")
     private String tokenHeader;
 
     /**
      * 过滤请求并验证JWT令牌
-     * 
+     * 对每个请求检查JWT Token，如果有效则设置用户认证信息
      * @param request HTTP请求
      * @param response HTTP响应
      * @param chain 过滤器链
@@ -60,11 +67,14 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         if (requestTokenHeader != null && requestTokenHeader.startsWith(tokenStart)) {
             // 提取JWT令牌（去掉"Bearer "前缀）
             String jwtToken = requestTokenHeader.substring(tokenStart.length());
+            // 从Token中提取用户名
             String username = jwtUtil.getUsernameFromToken(jwtToken);
 
             // Token 存在但是未登录
             if (jwtToken != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                // 根据用户名加载用户详细信息
                 UserDetails userDetails = userService.loadUserByUsername(username);
+                // 验证Token是否有效
                 if (userDetails != null && jwtUtil.validateToken(jwtToken, userDetails)) {
                     // 创建用户名密码认证令牌
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(

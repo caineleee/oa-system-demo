@@ -41,10 +41,12 @@ export default {
     };
   },
   mounted() {
+    // 组件挂载后刷新验证码
     this.refreshCaptcha();
   },
   methods: {
     handleLogin() {
+      // 构造登录请求数据
       const loginData = {
         username: this.username,
         password: this.password,
@@ -54,6 +56,7 @@ export default {
       // 发送登录请求到后端
       this.$http.post('/login', loginData)
         .then(response => {
+          // 处理登录响应
           if (response.data.code === 200) {
             // 登录成功后的处理逻辑
             alert('Login successful!');
@@ -67,6 +70,7 @@ export default {
           }
         })
         .catch(error => {
+          // 处理登录异常
           console.error('Login error:', error);
           alert('Login failed: ' + (error.response?.data?.message || error.message));
           // 刷新验证码

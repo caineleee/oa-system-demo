@@ -21,7 +21,7 @@ import java.util.Map;
 
 /**
  * @ClassName UserServiceImpl
- * @Description 用户登录逻辑
+ * @Description 用户登录逻辑实现类，负责处理用户登录、认证和JWT Token生成
  * @Author lihongliang
  * @Date 2025/9/21 11:06
  * @Version 1.0
@@ -30,35 +30,42 @@ import java.util.Map;
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
 
     /**
-     * 用户Mapper对象
+     * 用户Mapper对象，用于数据库操作
      */
     @Autowired
     private UserMapper userMapper;
 
     /**
-     * JWT 工具类对象
+     * JWT 工具类对象，用于生成和验证JWT Token
      */
     @Autowired
     private JwtUtil jwtUtil;
 
     /**
-     * JWT Token 的请求头名称
+     * JWT Token 的请求头名称，用于构建返回给前端的token信息
      */
     @Value("${jwt.token-start}")
     private String tokenStart;
 
     /**
      * 用户登录验证并生成JWT Token
+     * 该方法处理用户登录的完整流程：
+     * 1. 验证验证码
+     * 2. 验证用户名和密码
+     * 3. 检查用户是否被禁用
+     * 4. 生成新的JWT Token
      *
      * @param username 用户名
      * @param password 密码
      * @param code 验证码
-     * @param request  HTTP请求对象
+     * @param request  HTTP请求对象，用于获取session中的验证码
      * @return Response 响应结果，包含token信息或错误信息
      */
     @Override
     public Response login(String username, String password, String code, HttpServletRequest request) {
+        // 从session中获取验证码
         String captcha = (String) request.getSession().getAttribute("captcha");
+        // 验证验证码是否正确（包括null检查）
         if (captcha == null || captcha.isEmpty() || !captcha.equalsIgnoreCase(code)) {
             return Response.error("验证码错误, 请重新输入");
         }

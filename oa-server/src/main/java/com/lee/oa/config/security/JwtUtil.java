@@ -36,7 +36,7 @@ public class JwtUtil implements Serializable {
 
 
     /**
-     * 签名密钥对象
+     * 签名密钥对象，用于JWT的签名和验证
      */
     private SecretKey signKey;
 
@@ -50,6 +50,7 @@ public class JwtUtil implements Serializable {
     
     /**
      * 初始化签名密钥
+     * 该方法确保签名密钥只在首次使用时初始化一次
      */
     private void initSignKey() {
         if (this.signKey == null) {
@@ -61,8 +62,8 @@ public class JwtUtil implements Serializable {
 
     /**
      * 基于用户信息生成 JWT token
-     *
-     * @param userDetails
+     * 该方法创建包含用户信息和过期时间的JWT Token
+     * @param userDetails 用户详细信息
      * @return JWT令牌
      */
     public String generateToken(UserDetails userDetails) {
@@ -81,10 +82,10 @@ public class JwtUtil implements Serializable {
 
     /**
      * 验证令牌
-     *
+     * 验证JWT Token的有效性，包括用户名匹配和过期时间检查
      * @param token JWT令牌
      * @param userDetails 用户信息
-     * @return 验证结果
+     * @return 验证结果，true表示有效，false表示无效
      */
     public Boolean validateToken(String token, UserDetails userDetails) {
         // 确保签名密钥已初始化
@@ -99,7 +100,7 @@ public class JwtUtil implements Serializable {
 
     /**
      * 从令牌中检索用户名
-     * 
+     * 从JWT Token中提取存储的用户名信息
      * @param token JWT令牌
      * @return 用户名
      */
@@ -113,36 +114,37 @@ public class JwtUtil implements Serializable {
 
     /**
      * 判断令牌是否可以刷新
-     *
+     * 检查JWT Token是否未过期，可用于刷新Token的判断
      * @param token JWT令牌
-     * @return 是否可以刷新令牌
+     * @return 是否可以刷新令牌，true表示未过期可以刷新
      */
     public boolean canRefresh(String token) {
-        // 确保签名密钥已初始化
-        initSignKey();
         return !isTokenExpired(token);
     }
 
     /**
      * 刷新令牌
-     *
+     * 更新JWT Token的创建时间，生成新的Token
      * @param token JWT令牌
      * @return 新的令牌
      */
     public String refreshToken(String token) {
         // 确保签名密钥已初始化
         initSignKey();
+        // 获取现有Token的所有声明
         Claims claims = getAllClaimsFromToken(token);
+        // 更新创建时间
         claims.put(CLAIM_KEY_CREATED, new Date());
+        // 生成新的Token
         return doGenerateToken(claims);
     }
 
 
     /**
      * 检查令牌是否过期
-     *
+     * 比较JWT Token的过期时间与当前时间，判断是否已过期
      * @param token JWT令牌
-     * @return 是否过期
+     * @return 是否过期，true表示已过期
      */
     private Boolean isTokenExpired(String token) {
         // 确保签名密钥已初始化
@@ -155,7 +157,7 @@ public class JwtUtil implements Serializable {
 
     /**
      * 从令牌中检索过期日期
-     * 
+     * 提取JWT Token中的过期时间信息
      * @param token JWT令牌
      * @return 过期日期
      */
@@ -166,7 +168,7 @@ public class JwtUtil implements Serializable {
 
     /**
      * 从令牌中获取声明信息
-     * 
+     * 通用方法，用于从JWT Token中提取各种声明信息
      * @param token JWT令牌
      * @param claimsResolver 声明解析器函数
      * @param <T> 声明类型
@@ -183,7 +185,7 @@ public class JwtUtil implements Serializable {
 
     /**
      * 为令牌获取所有信息
-     * 
+     * 解析JWT Token并获取其中包含的所有声明
      * @param token JWT令牌
      * @return 声明对象
      */
@@ -207,7 +209,7 @@ public class JwtUtil implements Serializable {
 
     /**
      * 基于荷载创建 JWT token
-     *
+     * 使用声明信息创建JWT Token
      * @param claims 声明映射
      * @return JWT令牌
      */
