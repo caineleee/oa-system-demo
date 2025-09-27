@@ -86,3 +86,6 @@ tmp/
 .vscode/
 # IDEA配置目录
 /.idea/
+
+# 前端依赖
+/oa-frontend/node_modules/**
