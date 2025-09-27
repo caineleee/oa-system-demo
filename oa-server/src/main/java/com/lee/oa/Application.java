@@ -12,7 +12,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  */
 @SpringBootApplication
 @MapperScan("com.lee.oa.mapper")
-public class OaSystemApplication {
+public class Application {
     /**
      * 应用程序入口点
      * 
@@ -20,6 +20,6 @@ public class OaSystemApplication {
      */
     public static void main(String[] args) {
         // 启动Spring Boot应用程序
-        SpringApplication.run(OaSystemApplication.class, args);
+        SpringApplication.run(Application.class, args);
     }
 }

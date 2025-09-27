@@ -52,14 +52,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      *
      * @param username 用户名
      * @param password 密码
-     * @param code
+     * @param code 验证码
      * @param request  HTTP请求对象
      * @return Response 响应结果，包含token信息或错误信息
      */
     @Override
     public Response login(String username, String password, String code, HttpServletRequest request) {
         String captcha = (String) request.getSession().getAttribute("captcha");
-        if (captcha.isEmpty() || !captcha.equalsIgnoreCase(code)) {
+        if (captcha == null || captcha.isEmpty() || !captcha.equalsIgnoreCase(code)) {
             return Response.error("验证码错误, 请重新输入");
         }
         // 通过用户名加载用户详细信息
@@ -97,9 +97,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
 
     /**
-     * @param username
-     * @return
-     * @throws UsernameNotFoundException
+     * 根据用户名加载用户详细信息
+     * @param username 用户名
+     * @return 用户详细信息
+     * @throws UsernameNotFoundException 用户名不存在时抛出异常
      */
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

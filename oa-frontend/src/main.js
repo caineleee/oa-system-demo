@@ -16,7 +16,8 @@ axiosInstance.interceptors.request.use(
   config => {
     // 从本地存储获取 token 并添加到请求头
     const token = localStorage.getItem('token');
-    if (token) {
+    // 登录请求不应该携带JWT token
+    if (token && config.url !== '/login') {
       config.headers['Authorization'] = `Bearer ${token}`;
     }
     return config;
