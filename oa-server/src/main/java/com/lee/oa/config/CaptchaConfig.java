@@ -31,16 +31,18 @@ public class CaptchaConfig {
         properties.setProperty("kaptcha.textproducer.font.color", "blue");
         // 字体
         properties.setProperty("kaptcha.textproducer.font.names", "宋体,楷体,微软雅黑");
-        // 字体大小
-        properties.setProperty("kaptcha.textproducer.font.size", "40");
-        // 验证码间距
+        // 字体大小 - 进一步减小字体以适应图片
+        properties.setProperty("kaptcha.textproducer.font.size", "36");
+        // 验证码间距 - 保持适当间距
         properties.setProperty("kaptcha.textproducer.char.space", "4");
         // 验证码长度
         properties.setProperty("kaptcha.textproducer.char.length", "4");
         // 验证码图片宽度
         properties.setProperty("kaptcha.image.width", "100");
         // 验证码图片高度
-        properties.setProperty("kaptcha.image.height", "40");
+        properties.setProperty("kaptcha.image.height", "50");
+        // 去除干扰线，使验证码更清晰
+        properties.setProperty("kaptcha.noise.color", "white");
         // 验证码实现
         defaultKaptcha.setConfig(new Config(properties));
 
