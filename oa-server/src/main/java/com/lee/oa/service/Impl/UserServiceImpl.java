@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lee.oa.config.security.JwtUtil;
 import com.lee.oa.mapper.UserMapper;
+import com.lee.oa.pojo.Menu;
 import com.lee.oa.pojo.Response;
 import com.lee.oa.pojo.User;
 import com.lee.oa.service.UserService;
@@ -17,6 +18,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Map;
 
 /**

@@ -2,25 +2,24 @@ package com.lee.oa.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.lee.oa.pojo.Menu;
-import com.lee.oa.pojo.User;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 /**
- * 用户Mapper接口，用于操作用户相关数据
- * 
- * @author Lee
- * @since 1.0.0
+ * @ClassName MenuMapper
+ * @Description
+ * @Author lihongliang
+ * @Date 2025/9/28 11:23
+ * @Version 1.0
  */
 @Mapper
 @Repository
-public interface UserMapper extends BaseMapper<User> {
+public interface MenuMapper extends BaseMapper<Menu> {
 
     /**
      * 根据用户 ID, 获取用户可以访问的菜单列表
-     * @param id 用户 ID
      * @return 用户菜单列表
      */
     List<Menu> getMenusByUserId(Long id);
