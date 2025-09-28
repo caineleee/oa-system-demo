@@ -44,6 +44,11 @@ buildNumber.properties
 .DS_Store
 # Windows缩略图缓存
 Thumbs.db
+# macOS系统文件
+.AppleDouble
+
+# 数据库 sql 文件
+*.sql
 
 # Spring Boot 相关文件
 # 应用配置文件（排除在忽略列表中）
@@ -68,6 +73,8 @@ tmp/
 **/test-output/
 # 测试文件
 *.test
+# 测试类目录
+oa-server/src/test/**
 
 # 其他开发工具文件
 # Eclipse设置文件
