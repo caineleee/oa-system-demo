@@ -15,14 +15,28 @@ spring:
     password: root
     # 数据库驱动类名
     driver-class-name: com.mysql.cj.jdbc.Driver
-  # SQL初始化配置
-#  sql:
-#    init:
-#      # schema脚本位置
-#      schema-locations: classpath:schema.sql
-#      # 初始化模式，always表示总是执行
-#      mode: always
-  # 解决Springfox与Spring Boot 2.6+兼容性问题
+
+  redis:
+    # Redis服务器地址
+    host: localhost
+    # Redis服务器端口
+    port: 6379
+    # 连接超时时间
+    timeout: 10000
+    # Redis数据库索引
+    database: 0
+    # 连接池配置
+    jedis:
+      pool:
+        # 连接池最大连接数(默认8)
+        max-active: 1024
+        # 连接池最大空闲连接数(默认8)
+        max-idle: 200
+        # 连接池最大等待时间 (默认-1,会阻塞,设为 10000ms)
+        max-wait: 10000
+        # 连接池最小空闲连接数(默认0)
+        min-idle: 5
+
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
