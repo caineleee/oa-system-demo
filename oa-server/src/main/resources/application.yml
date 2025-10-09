@@ -36,6 +36,19 @@ spring:
         max-wait: 10000
         # 连接池最小空闲连接数(默认0)
         min-idle: 5
+    lettuce:
+      pool:
+        max-active: 8
+        max-idle: 8
+      cluster:
+        nodes:
+          # 主节点
+          - localhost:6379
+          # 从节点 (当前项目与 docker redis 主从节点都在一台机器上, 所有区分端口号, 从节点改为 6380)
+          - localhost:6380
+      read-from: REPLICA_PREFERRED  # 优先从从节点读取
+      replication:
+        enabled: true  # 启用读写分离
 
   mvc:
     pathmatch:

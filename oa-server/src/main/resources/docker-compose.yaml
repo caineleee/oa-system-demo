@@ -1,0 +1,313 @@
+# Docker Compose 版本声明
+version: '3.8'
+
+# 服务定义
+services:
+  # MySQL 数据库服务
+  mysql:
+    # 使用的镜像
+    image: mysql:8.0
+    # 容器名称
+    container_name: mysql-server
+    # 端口映射 (主机端口:容器端口)
+    ports:
+      - "3306:3306"
+    # 网络配置
+    networks:
+      - redis-net
+    # 环境变量配置
+    environment:
+      # MySQL root 用户密码
+      MYSQL_ROOT_PASSWORD: root
+      # 默认创建的数据库名称
+      MYSQL_DATABASE: oa-sys-database
+    # 数据卷挂载
+    volumes:
+      # 挂载 MySQL 数据目录以实现数据持久化
+      - mysql-data:/var/lib/mysql
+    # MySQL 启动命令参数
+    command: --default-authentication-plugin=mysql_native_password
+    # 健康检查配置
+    healthcheck:
+      # 健康检查命令
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot"]
+      # 检查间隔
+      interval: 30s
+      # 超时时间
+      timeout: 10s
+      # 重试次数
+      retries: 3
+
+  # Redis 主节点服务
+  redis-master:
+    # 使用的镜像
+    image: redis:7-alpine
+    # 容器名称
+    container_name: redis-master
+    # 端口映射
+    ports:
+      - "6379:6379"
+    # 网络配置
+    networks:
+      - redis-net
+    # 数据卷挂载
+    volumes:
+      # 挂载 Redis 数据目录以实现数据持久化
+      - redis_master_data:/data
+    # Redis 启动命令参数
+    command: >
+      redis-server
+      # Redis 端口号
+      --port 6379
+      # 关闭保护模式
+      --protected-mode no
+      # 不以守护进程方式运行
+      --daemonize no
+      # 数据目录
+      --dir /data
+      # RDB 持久化文件名
+      --dbfilename dump-6379.rdb
+      # 日志文件路径
+      --logfile /data/redis-6379.log
+      # AOF 持久化文件名
+      --appendfilename appendonly-6379.aof
+      # 设置密码认证
+      --requirepass root
+      # 主从复制认证密码
+      --masterauth root
+
+  # Redis 从节点1服务
+  redis-slave1:
+    # 使用的镜像
+    image: redis:7-alpine
+    # 容器名称
+    container_name: redis-slave1
+    # 端口映射
+    ports:
+      - "6380:6380"
+    # 网络配置
+    networks:
+      - redis-net
+    # 数据卷挂载
+    volumes:
+      # 挂载 Redis 数据目录以实现数据持久化
+      - redis_slave1_data:/data
+    # 依赖关系，确保主节点先启动
+    depends_on:
+      - redis-master
+    # Redis 启动命令参数
+    command: >
+      redis-server
+      # Redis 端口号
+      --port 6380
+      # 关闭保护模式
+      --protected-mode no
+      # 不以守护进程方式运行
+      --daemonize no
+      # 数据目录
+      --dir /data
+      # RDB 持久化文件名
+      --dbfilename dump-6380.rdb
+      # 日志文件路径
+      --logfile /data/redis-6380.log
+      # AOF 持久化文件名
+      --appendfilename appendonly-6380.aof
+      # 配置主从复制
+      --replicaof redis-master 6379
+      # 设置密码认证
+      --requirepass root
+      # 主从复制认证密码
+      --masterauth root
+
+  # Redis 从节点2服务
+  redis-slave2:
+    # 使用的镜像
+    image: redis:7-alpine
+    # 容器名称
+    container_name: redis-slave2
+    # 端口映射
+    ports:
+      - "6381:6381"
+    # 网络配置
+    networks:
+      - redis-net
+    # 数据卷挂载
+    volumes:
+      # 挂载 Redis 数据目录以实现数据持久化
+      - redis_slave2_data:/data
+    # 依赖关系，确保主节点先启动
+    depends_on:
+      - redis-master
+    # Redis 启动命令参数
+    command: >
+      redis-server
+      # Redis 端口号
+      --port 6381
+      # 关闭保护模式
+      --protected-mode no
+      # 不以守护进程方式运行
+      --daemonize no
+      # 数据目录
+      --dir /data
+      # RDB 持久化文件名
+      --dbfilename dump-6381.rdb
+      # 日志文件路径
+      --logfile /data/redis-6381.log
+      # AOF 持久化文件名
+      --appendfilename appendonly-6381.aof
+      # 配置主从复制
+      --replicaof redis-master 6379
+      # 设置密码认证
+      --requirepass root
+      # 主从复制认证密码
+      --masterauth root
+
+  # Redis Sentinel 1 服务
+  redis-sentinel1:
+    # 使用的镜像
+    image: redis:7-alpine
+    # 容器名称
+    container_name: redis-sentinel1
+    # 端口映射
+    ports:
+      - "26379:26379"
+    # 网络配置
+    networks:
+      - redis-net
+    # 数据卷挂载
+    volumes:
+      # 挂载 Sentinel 数据目录
+      - sentinel1-data:/data
+    # 依赖关系，确保 Redis 主节点先启动
+    depends_on:
+      - redis-master
+    # Sentinel 启动命令参数
+    command: >
+      sh -c "
+        # 生成 Sentinel 配置文件
+        echo 'port 26379' > /tmp/sentinel.conf &&
+        # 工作目录
+        echo 'dir /data' >> /tmp/sentinel.conf &&
+        # 监控的主节点配置 (名称 IP 端口 法定人数)
+        echo 'sentinel monitor mymaster redis-master 6379 2' >> /tmp/sentinel.conf &&
+        # 主观下线判断时间(毫秒)
+        echo 'sentinel down-after-milliseconds mymaster 5000' >> /tmp/sentinel.conf &&
+        # 故障转移时并行同步数量
+        echo 'sentinel parallel-syncs mymaster 1' >> /tmp/sentinel.conf &&
+        # 故障转移超时时间(毫秒)
+        echo 'sentinel failover-timeout mymaster 10000' >> /tmp/sentinel.conf &&
+        # 解析主机名
+        echo 'sentinel resolve-hostnames yes' >> /tmp/sentinel.conf &&
+        # 主节点认证密码
+        echo 'sentinel auth-pass mymaster root' >> /tmp/sentinel.conf &&
+        # 启动 Sentinel
+        redis-sentinel /tmp/sentinel.conf
+      "
+
+  # Redis Sentinel 2 服务
+  redis-sentinel2:
+    # 使用的镜像
+    image: redis:7-alpine
+    # 容器名称
+    container_name: redis-sentinel2
+    # 端口映射
+    ports:
+      - "26380:26379"
+    # 网络配置
+    networks:
+      - redis-net
+    # 数据卷挂载
+    volumes:
+      # 挂载 Sentinel 数据目录
+      - sentinel2-data:/data
+    # 依赖关系，确保 Redis 主节点先启动
+    depends_on:
+      - redis-master
+    # Sentinel 启动命令参数
+    command: >
+      sh -c "
+        # 生成 Sentinel 配置文件
+        echo 'port 26379' > /tmp/sentinel.conf &&
+        # 工作目录
+        echo 'dir /data' >> /tmp/sentinel.conf &&
+        # 监控的主节点配置 (名称 IP 端口 法定人数)
+        echo 'sentinel monitor mymaster redis-master 6379 2' >> /tmp/sentinel.conf &&
+        # 主观下线判断时间(毫秒)
+        echo 'sentinel down-after-milliseconds mymaster 5000' >> /tmp/sentinel.conf &&
+        # 故障转移时并行同步数量
+        echo 'sentinel parallel-syncs mymaster 1' >> /tmp/sentinel.conf &&
+        # 故障转移超时时间(毫秒)
+        echo 'sentinel failover-timeout mymaster 10000' >> /tmp/sentinel.conf &&
+        # 解析主机名
+        echo 'sentinel resolve-hostnames yes' >> /tmp/sentinel.conf &&
+        # 主节点认证密码
+        echo 'sentinel auth-pass mymaster root' >> /tmp/sentinel.conf &&
+        # 启动 Sentinel
+        redis-sentinel /tmp/sentinel.conf
+      "
+
+  # Redis Sentinel 3 服务
+  redis-sentinel3:
+    # 使用的镜像
+    image: redis:7-alpine
+    # 容器名称
+    container_name: redis-sentinel3
+    # 端口映射
+    ports:
+      - "26381:26379"
+    # 网络配置
+    networks:
+      - redis-net
+    # 数据卷挂载
+    volumes:
+      # 挂载 Sentinel 数据目录
+      - sentinel3-data:/data
+    # 依赖关系，确保 Redis 主节点先启动
+    depends_on:
+      - redis-master
+    # Sentinel 启动命令参数
+    command: >
+      sh -c "
+        # 生成 Sentinel 配置文件
+        echo 'port 26379' > /tmp/sentinel.conf &&
+        # 工作目录
+        echo 'dir /data' >> /tmp/sentinel.conf &&
+        # 监控的主节点配置 (名称 IP 端口 法定人数)
+        echo 'sentinel monitor mymaster redis-master 6379 2' >> /tmp/sentinel.conf &&
+        # 主观下线判断时间(毫秒)
+        echo 'sentinel down-after-milliseconds mymaster 5000' >> /tmp/sentinel.conf &&
+        # 故障转移时并行同步数量
+        echo 'sentinel parallel-syncs mymaster 1' >> /tmp/sentinel.conf &&
+        # 故障转移超时时间(毫秒)
+        echo 'sentinel failover-timeout mymaster 10000' >> /tmp/sentinel.conf &&
+        # 解析主机名
+        echo 'sentinel resolve-hostnames yes' >> /tmp/sentinel.conf &&
+        # 主节点认证密码
+        echo 'sentinel auth-pass mymaster root' >> /tmp/sentinel.conf &&
+        # 启动 Sentinel
+        redis-sentinel /tmp/sentinel.conf
+      "
+
+# 数据卷定义
+volumes:
+  # MySQL 数据卷
+  mysql-data:
+  # Redis 主节点数据卷
+  redis_master_data:
+  # Redis 从节点1数据卷
+  redis_slave1_data:
+  # Redis 从节点2数据卷
+  redis_slave2_data:
+  # Sentinel 1 数据卷
+  sentinel1-data:
+  # Sentinel 2 数据卷
+  sentinel2-data:
+  # Sentinel 3 数据卷
+  sentinel3-data:
+
+# 网络定义
+networks:
+  # 自定义网络
+  redis-net:
+    # 网络驱动
+    driver: bridge
