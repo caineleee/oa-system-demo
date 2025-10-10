@@ -1,6 +1,3 @@
-# Docker Compose 版本声明
-version: '3.8'
-
 # 服务定义
 services:
   # MySQL 数据库服务
@@ -9,6 +6,8 @@ services:
     image: mysql:8.0
     # 容器名称
     container_name: mysql-server
+    # 重启策略
+    restart: unless-stopped
     # 端口映射 (主机端口:容器端口)
     ports:
       - "3306:3306"
@@ -44,6 +43,8 @@ services:
     image: redis:7-alpine
     # 容器名称
     container_name: redis-master
+    # 重启策略
+    restart: unless-stopped
     # 端口映射
     ports:
       - "6379:6379"
@@ -63,11 +64,11 @@ services:
       --dir /data
       --dbfilename dump-6379.rdb
       --logfile /data/redis-6379.log
+      --appendonly yes
       --appendfilename appendonly-6379.aof
       --requirepass root
       --masterauth root
       --loglevel verbose
-
 
   # Redis 从节点1服务
   redis-slave1:
@@ -75,6 +76,8 @@ services:
     image: redis:7-alpine
     # 容器名称
     container_name: redis-slave1
+    # 重启策略
+    restart: unless-stopped
     # 端口映射
     ports:
       - "6380:6380"
@@ -97,6 +100,7 @@ services:
       --dir /data
       --dbfilename dump-6380.rdb
       --logfile /data/redis-6380.log
+      --appendonly yes
       --appendfilename appendonly-6380.aof
       --replicaof redis-master 6379
       --requirepass root
@@ -109,6 +113,8 @@ services:
     image: redis:7-alpine
     # 容器名称
     container_name: redis-slave2
+    # 重启策略
+    restart: unless-stopped
     # 端口映射
     ports:
       - "6381:6381"
@@ -131,6 +137,7 @@ services:
       --dir /data
       --dbfilename dump-6381.rdb
       --logfile /data/redis-6381.log
+      --appendonly yes
       --appendfilename appendonly-6381.aof
       --replicaof redis-master 6379
       --requirepass root
@@ -143,6 +150,8 @@ services:
     image: redis:7-alpine
     # 容器名称
     container_name: redis-sentinel1
+    # 重启策略
+    restart: unless-stopped
     # 端口映射
     ports:
       - "26379:26379"
@@ -176,6 +185,8 @@ services:
     image: redis:7-alpine
     # 容器名称
     container_name: redis-sentinel2
+    # 重启策略
+    restart: unless-stopped
     # 端口映射
     ports:
       - "26380:26379"
@@ -209,6 +220,8 @@ services:
     image: redis:7-alpine
     # 容器名称
     container_name: redis-sentinel3
+    # 重启策略
+    restart: unless-stopped
     # 端口映射
     ports:
       - "26381:26379"
