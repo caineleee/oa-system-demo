@@ -66,6 +66,8 @@ services:
       --appendfilename appendonly-6379.aof
       --requirepass root
       --masterauth root
+      --loglevel verbose
+
 
   # Redis 从节点1服务
   redis-slave1:
@@ -99,6 +101,7 @@ services:
       --replicaof redis-master 6379
       --requirepass root
       --masterauth root
+      --loglevel verbose
 
   # Redis 从节点2服务
   redis-slave2:
@@ -132,6 +135,7 @@ services:
       --replicaof redis-master 6379
       --requirepass root
       --masterauth root
+      --loglevel verbose
 
   # Redis Sentinel 1 服务
   redis-sentinel1:
@@ -153,7 +157,7 @@ services:
     depends_on:
       - redis-master
     # Sentinel 启动命令参数
-    command: |
+    command: >
       sh -c "
         echo 'port 26379' > /tmp/sentinel.conf &&
         echo 'dir /data' >> /tmp/sentinel.conf &&
@@ -163,8 +167,6 @@ services:
         echo 'sentinel failover-timeout mymaster 10000' >> /tmp/sentinel.conf &&
         echo 'sentinel resolve-hostnames yes' >> /tmp/sentinel.conf &&
         echo 'sentinel auth-pass mymaster root' >> /tmp/sentinel.conf &&
-        echo 'loglevel verbose' >> /tmp/sentinel.conf &&
-        echo 'logfile /data/sentinel.log' >> /tmp/sentinel.conf &&
         redis-sentinel /tmp/sentinel.conf
       "
 
@@ -188,7 +190,7 @@ services:
     depends_on:
       - redis-master
     # Sentinel 启动命令参数
-    command: |
+    command: >
       sh -c "
         echo 'port 26379' > /tmp/sentinel.conf &&
         echo 'dir /data' >> /tmp/sentinel.conf &&
@@ -198,8 +200,6 @@ services:
         echo 'sentinel failover-timeout mymaster 10000' >> /tmp/sentinel.conf &&
         echo 'sentinel resolve-hostnames yes' >> /tmp/sentinel.conf &&
         echo 'sentinel auth-pass mymaster root' >> /tmp/sentinel.conf &&
-        echo 'loglevel verbose' >> /tmp/sentinel.conf &&
-        echo 'logfile /data/sentinel.log' >> /tmp/sentinel.conf &&
         redis-sentinel /tmp/sentinel.conf
       "
 
@@ -223,7 +223,7 @@ services:
     depends_on:
       - redis-master
     # Sentinel 启动命令参数
-    command: |
+    command: >
       sh -c "
         echo 'port 26379' > /tmp/sentinel.conf &&
         echo 'dir /data' >> /tmp/sentinel.conf &&
@@ -233,8 +233,6 @@ services:
         echo 'sentinel failover-timeout mymaster 10000' >> /tmp/sentinel.conf &&
         echo 'sentinel resolve-hostnames yes' >> /tmp/sentinel.conf &&
         echo 'sentinel auth-pass mymaster root' >> /tmp/sentinel.conf &&
-        echo 'loglevel verbose' >> /tmp/sentinel.conf &&
-        echo 'logfile /data/sentinel.log' >> /tmp/sentinel.conf &&
         redis-sentinel /tmp/sentinel.conf
       "
 
