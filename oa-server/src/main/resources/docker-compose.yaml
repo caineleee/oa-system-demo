@@ -57,23 +57,14 @@ services:
     # Redis 启动命令参数
     command: >
       redis-server
-      # Redis 端口号
       --port 6379
-      # 关闭保护模式
       --protected-mode no
-      # 不以守护进程方式运行
       --daemonize no
-      # 数据目录
       --dir /data
-      # RDB 持久化文件名
       --dbfilename dump-6379.rdb
-      # 日志文件路径
       --logfile /data/redis-6379.log
-      # AOF 持久化文件名
       --appendfilename appendonly-6379.aof
-      # 设置密码认证
       --requirepass root
-      # 主从复制认证密码
       --masterauth root
 
   # Redis 从节点1服务
@@ -98,25 +89,15 @@ services:
     # Redis 启动命令参数
     command: >
       redis-server
-      # Redis 端口号
       --port 6380
-      # 关闭保护模式
       --protected-mode no
-      # 不以守护进程方式运行
       --daemonize no
-      # 数据目录
       --dir /data
-      # RDB 持久化文件名
       --dbfilename dump-6380.rdb
-      # 日志文件路径
       --logfile /data/redis-6380.log
-      # AOF 持久化文件名
       --appendfilename appendonly-6380.aof
-      # 配置主从复制
       --replicaof redis-master 6379
-      # 设置密码认证
       --requirepass root
-      # 主从复制认证密码
       --masterauth root
 
   # Redis 从节点2服务
@@ -141,25 +122,15 @@ services:
     # Redis 启动命令参数
     command: >
       redis-server
-      # Redis 端口号
       --port 6381
-      # 关闭保护模式
       --protected-mode no
-      # 不以守护进程方式运行
       --daemonize no
-      # 数据目录
       --dir /data
-      # RDB 持久化文件名
       --dbfilename dump-6381.rdb
-      # 日志文件路径
       --logfile /data/redis-6381.log
-      # AOF 持久化文件名
       --appendfilename appendonly-6381.aof
-      # 配置主从复制
       --replicaof redis-master 6379
-      # 设置密码认证
       --requirepass root
-      # 主从复制认证密码
       --masterauth root
 
   # Redis Sentinel 1 服务
@@ -182,25 +153,18 @@ services:
     depends_on:
       - redis-master
     # Sentinel 启动命令参数
-    command: >
+    command: |
       sh -c "
-        # 生成 Sentinel 配置文件
         echo 'port 26379' > /tmp/sentinel.conf &&
-        # 工作目录
         echo 'dir /data' >> /tmp/sentinel.conf &&
-        # 监控的主节点配置 (名称 IP 端口 法定人数)
         echo 'sentinel monitor mymaster redis-master 6379 2' >> /tmp/sentinel.conf &&
-        # 主观下线判断时间(毫秒)
         echo 'sentinel down-after-milliseconds mymaster 5000' >> /tmp/sentinel.conf &&
-        # 故障转移时并行同步数量
         echo 'sentinel parallel-syncs mymaster 1' >> /tmp/sentinel.conf &&
-        # 故障转移超时时间(毫秒)
         echo 'sentinel failover-timeout mymaster 10000' >> /tmp/sentinel.conf &&
-        # 解析主机名
         echo 'sentinel resolve-hostnames yes' >> /tmp/sentinel.conf &&
-        # 主节点认证密码
         echo 'sentinel auth-pass mymaster root' >> /tmp/sentinel.conf &&
-        # 启动 Sentinel
+        echo 'loglevel verbose' >> /tmp/sentinel.conf &&
+        echo 'logfile /data/sentinel.log' >> /tmp/sentinel.conf &&
         redis-sentinel /tmp/sentinel.conf
       "
 
@@ -224,25 +188,18 @@ services:
     depends_on:
       - redis-master
     # Sentinel 启动命令参数
-    command: >
+    command: |
       sh -c "
-        # 生成 Sentinel 配置文件
         echo 'port 26379' > /tmp/sentinel.conf &&
-        # 工作目录
         echo 'dir /data' >> /tmp/sentinel.conf &&
-        # 监控的主节点配置 (名称 IP 端口 法定人数)
         echo 'sentinel monitor mymaster redis-master 6379 2' >> /tmp/sentinel.conf &&
-        # 主观下线判断时间(毫秒)
         echo 'sentinel down-after-milliseconds mymaster 5000' >> /tmp/sentinel.conf &&
-        # 故障转移时并行同步数量
         echo 'sentinel parallel-syncs mymaster 1' >> /tmp/sentinel.conf &&
-        # 故障转移超时时间(毫秒)
         echo 'sentinel failover-timeout mymaster 10000' >> /tmp/sentinel.conf &&
-        # 解析主机名
         echo 'sentinel resolve-hostnames yes' >> /tmp/sentinel.conf &&
-        # 主节点认证密码
         echo 'sentinel auth-pass mymaster root' >> /tmp/sentinel.conf &&
-        # 启动 Sentinel
+        echo 'loglevel verbose' >> /tmp/sentinel.conf &&
+        echo 'logfile /data/sentinel.log' >> /tmp/sentinel.conf &&
         redis-sentinel /tmp/sentinel.conf
       "
 
@@ -266,25 +223,18 @@ services:
     depends_on:
       - redis-master
     # Sentinel 启动命令参数
-    command: >
+    command: |
       sh -c "
-        # 生成 Sentinel 配置文件
         echo 'port 26379' > /tmp/sentinel.conf &&
-        # 工作目录
         echo 'dir /data' >> /tmp/sentinel.conf &&
-        # 监控的主节点配置 (名称 IP 端口 法定人数)
         echo 'sentinel monitor mymaster redis-master 6379 2' >> /tmp/sentinel.conf &&
-        # 主观下线判断时间(毫秒)
         echo 'sentinel down-after-milliseconds mymaster 5000' >> /tmp/sentinel.conf &&
-        # 故障转移时并行同步数量
         echo 'sentinel parallel-syncs mymaster 1' >> /tmp/sentinel.conf &&
-        # 故障转移超时时间(毫秒)
         echo 'sentinel failover-timeout mymaster 10000' >> /tmp/sentinel.conf &&
-        # 解析主机名
         echo 'sentinel resolve-hostnames yes' >> /tmp/sentinel.conf &&
-        # 主节点认证密码
         echo 'sentinel auth-pass mymaster root' >> /tmp/sentinel.conf &&
-        # 启动 Sentinel
+        echo 'loglevel verbose' >> /tmp/sentinel.conf &&
+        echo 'logfile /data/sentinel.log' >> /tmp/sentinel.conf &&
         redis-sentinel /tmp/sentinel.conf
       "
 
