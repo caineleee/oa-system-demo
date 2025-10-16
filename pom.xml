@@ -112,24 +112,31 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-redis</artifactId>
-            <!--
-                1.x 的版本默认采用固定连接池是 Jedis,
-                2.x 的版本默认采用连接池是 lettuce,
-                如果采用 Jedis, 则需要移除 lettuce 依赖
-                并在下方引入 Jedis 依赖
-            -->
-            <exclusions>
-                <exclusion>
-                    <groupId>io.lettuce</groupId>
-                    <artifactId>lettuce-core</artifactId>
-                </exclusion>
-            </exclusions>
+<!--            &lt;!&ndash;-->
+<!--                1.x 的版本默认采用固定连接池是 Jedis,-->
+<!--                2.x 的版本默认采用连接池是 lettuce,-->
+<!--                如果采用 Jedis, 则需要移除 lettuce 依赖-->
+<!--                并在下方引入 Jedis 依赖-->
+<!--            &ndash;&gt;-->
+<!--            <exclusions>-->
+<!--                <exclusion>-->
+<!--                    <groupId>io.lettuce</groupId>-->
+<!--                    <artifactId>lettuce-core</artifactId>-->
+<!--                </exclusion>-->
+<!--            </exclusions>-->
         </dependency>
-        <!-- Redis 线程池 Jedis 依赖 -->
+<!--        &lt;!&ndash; Redis 线程池 Jedis 依赖 &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>redis.clients</groupId>-->
+<!--            <artifactId>jedis</artifactId>-->
+<!--        </dependency>-->
+        <!-- commons-pool2 配合 redis lettuce 使用. jedis 是直连客户端,线程不安全, 所以使用 lettuce  -->
         <dependency>
-            <groupId>redis.clients</groupId>
-            <artifactId>jedis</artifactId>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-pool2</artifactId>
+<!--            <version>2.6.2</version>-->
         </dependency>
+
 
         <!-- 使用Springfox Boot Starter替代单独的swagger2和swagger-ui依赖 -->
         <dependency>
