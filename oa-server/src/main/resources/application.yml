@@ -25,8 +25,26 @@ spring:
     timeout: 10000
     # Redis数据库索引
     database: 0
+    # Redis密码
+    password: root
+    # Sentinel 配置
+    sentinel:
+      master: mymaster
+      # Sentinel 节点列表
+      nodes: localhost:26379,localhost:26380,localhost:26381
     # 连接池配置
-    jedis:
+#    jedis 已经弃用, 使用 lettuce
+#    jedis:
+#      pool:
+#        # 连接池最大连接数(默认8)
+#        max-active: 1024
+#        # 连接池最大空闲连接数(默认8)
+#        max-idle: 200
+#        # 连接池最大等待时间 (默认-1,会阻塞,设为 10000ms)
+#        max-wait: 10000
+#        # 连接池最小空闲连接数(默认0)
+#        min-idle: 5
+    lettuce:
       pool:
         # 连接池最大连接数(默认8)
         max-active: 1024
@@ -36,16 +54,13 @@ spring:
         max-wait: 10000
         # 连接池最小空闲连接数(默认0)
         min-idle: 5
-    lettuce:
-      pool:
-        max-active: 8
-        max-idle: 8
       cluster:
         nodes:
           # 主节点
           - localhost:6379
-          # 从节点 (当前项目与 docker redis 主从节点都在一台机器上, 所有区分端口号, 从节点改为 6380)
+          # 从节点 (当前项目与 docker redis 主从节点都在一台机器上, 所有区分端口号, 从节点改为 6380和 6381)
           - localhost:6380
+          - localhost:6381
       read-from: REPLICA_PREFERRED  # 优先从从节点读取
       replication:
         enabled: true  # 启用读写分离

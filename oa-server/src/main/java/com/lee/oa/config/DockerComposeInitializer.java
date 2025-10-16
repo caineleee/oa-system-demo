@@ -26,7 +26,7 @@ public class DockerComposeInitializer implements ApplicationRunner {
     private static final Logger logger = LoggerFactory.getLogger(DockerComposeInitializer.class);
 
     // 需要检查的容器名称
-    private static final List<String> REQUIRED_CONTAINERS = Arrays.asList(
+    private static final List<String> REQUIRED_CONTAINERS = List.of(
             "mysql-server",
             "redis-master",
             "redis-slave1",
@@ -44,8 +44,11 @@ public class DockerComposeInitializer implements ApplicationRunner {
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
+        // 强行略过 容器启动逻辑
+        if (true) {
+            return;
+        }
         logger.info("检查 Docker 网络状态...");
-
         // 检查并创建 Docker 网络
         if (!isDockerNetworkExists(DOCKER_NETWORK_NAME)) {
             logger.info("Docker 网络 {} 不存在，正在创建...", DOCKER_NETWORK_NAME);
