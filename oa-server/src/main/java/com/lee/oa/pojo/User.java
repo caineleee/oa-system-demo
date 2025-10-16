@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -125,6 +126,7 @@ public class User implements Serializable, UserDetails {
      * @return 权限集合
      */
     @Override
+    @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // 如果没有分配角色，默认返回空列表
         if (roles != null && !roles.isEmpty()) {
@@ -142,6 +144,7 @@ public class User implements Serializable, UserDetails {
      * @return  boolean
      */
     @Override
+    @JsonIgnore
     public boolean isAccountNonExpired() {
         return true;
     }
@@ -151,6 +154,7 @@ public class User implements Serializable, UserDetails {
      * @return boolean
      */
     @Override
+    @JsonIgnore
     public boolean isAccountNonLocked() {
         return true;
     }
@@ -160,6 +164,7 @@ public class User implements Serializable, UserDetails {
      * @return  boolean
      */
     @Override
+    @JsonIgnore
     public boolean isCredentialsNonExpired() {
         return true;
     }
@@ -169,6 +174,7 @@ public class User implements Serializable, UserDetails {
      * @return boolean
      */
     @Override
+    @JsonIgnore
     public boolean isEnabled() {
         return enabled;
     }
