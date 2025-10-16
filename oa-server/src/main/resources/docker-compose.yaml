@@ -69,6 +69,14 @@ services:
       --requirepass root
       --masterauth root
       --loglevel verbose
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      # 检查间隔
+      interval: 60s
+      # 超时时间
+      timeout: 10s
+      # 重试次数
+      retries: 3
 
   # Redis 从节点1服务
   redis-slave1:
@@ -106,6 +114,14 @@ services:
       --requirepass root
       --masterauth root
       --loglevel verbose
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      # 检查间隔
+      interval: 60s
+      # 超时时间
+      timeout: 10s
+      # 重试次数
+      retries: 3
 
   # Redis 从节点2服务
   redis-slave2:
@@ -143,6 +159,14 @@ services:
       --requirepass root
       --masterauth root
       --loglevel verbose
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      # 检查间隔
+      interval: 60s
+      # 超时时间
+      timeout: 10s
+      # 重试次数
+      retries: 3
 
   # Redis Sentinel 1 服务
   redis-sentinel1:
@@ -164,13 +188,14 @@ services:
       - sentinel1-data:/data
     # 依赖关系，确保 Redis 主节点先启动
     depends_on:
-      - redis-master
+      redis-master:
+          condition: service_healthy
     # Sentinel 启动命令参数
     command: >
       sh -c "
         echo 'port 26379' > /tmp/sentinel.conf &&
         echo 'dir /data' >> /tmp/sentinel.conf &&
-        echo 'sentinel monitor mymaster redis-master 6379 2' >> /tmp/sentinel.conf &&
+        echo 'sentinel monitor mymaster localhost 6379 2' >> /tmp/sentinel.conf &&
         echo 'sentinel down-after-milliseconds mymaster 5000' >> /tmp/sentinel.conf &&
         echo 'sentinel parallel-syncs mymaster 1' >> /tmp/sentinel.conf &&
         echo 'sentinel failover-timeout mymaster 10000' >> /tmp/sentinel.conf &&
@@ -199,13 +224,14 @@ services:
       - sentinel2-data:/data
     # 依赖关系，确保 Redis 主节点先启动
     depends_on:
-      - redis-master
+      redis-master:
+        condition: service_healthy
     # Sentinel 启动命令参数
     command: >
       sh -c "
         echo 'port 26379' > /tmp/sentinel.conf &&
         echo 'dir /data' >> /tmp/sentinel.conf &&
-        echo 'sentinel monitor mymaster redis-master 6379 2' >> /tmp/sentinel.conf &&
+        echo 'sentinel monitor mymaster localhost 6379 2' >> /tmp/sentinel.conf &&
         echo 'sentinel down-after-milliseconds mymaster 5000' >> /tmp/sentinel.conf &&
         echo 'sentinel parallel-syncs mymaster 1' >> /tmp/sentinel.conf &&
         echo 'sentinel failover-timeout mymaster 10000' >> /tmp/sentinel.conf &&
@@ -234,13 +260,14 @@ services:
       - sentinel3-data:/data
     # 依赖关系，确保 Redis 主节点先启动
     depends_on:
-      - redis-master
+      redis-master:
+        condition: service_healthy
     # Sentinel 启动命令参数
     command: >
       sh -c "
         echo 'port 26379' > /tmp/sentinel.conf &&
         echo 'dir /data' >> /tmp/sentinel.conf &&
-        echo 'sentinel monitor mymaster redis-master 6379 2' >> /tmp/sentinel.conf &&
+        echo 'sentinel monitor mymaster localhost 6379 2' >> /tmp/sentinel.conf &&
         echo 'sentinel down-after-milliseconds mymaster 5000' >> /tmp/sentinel.conf &&
         echo 'sentinel parallel-syncs mymaster 1' >> /tmp/sentinel.conf &&
         echo 'sentinel failover-timeout mymaster 10000' >> /tmp/sentinel.conf &&
