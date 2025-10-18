@@ -6,8 +6,11 @@ import com.lee.oa.pojo.Menu;
 import com.lee.oa.pojo.User;
 import com.lee.oa.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
@@ -24,14 +27,27 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     @Autowired
     private MenuMapper menuMapper;
 
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+
     /**
      * 根据用户 ID, 获取用户可以访问的菜单列表
      * @return 用户菜单列表
      */
     @Override
     public List<Menu> getMenusByUserId() {
-        return menuMapper.getMenusByUserId(
-                ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId());
+        Long userId =  ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
+        // 从 redis 获取菜单数据
+        List<Menu> menus = (List<Menu>) valueOperations.get("menu_" + userId);
+        // 如果为空则从数据库获取
+        if (CollectionUtils.isEmpty(menus)) {
+            menus = menuMapper.getMenusByUserId(userId);
+            // 从数据库获取的数据, 存入 redis
+            valueOperations.set("menu_" + userId, menus);
+        }
+        return menus;
+
     }
 
 }
