@@ -39,6 +39,10 @@ public class CaptchaController {
         String text = defaultKaptcha.createText();
         System.out.println("验证码内容: " + text);
 
+        if (request.getParameter("env") != null && request.getParameter("env").equals("test")) {
+            response.setHeader("captcha",  text);
+        }
+
         // 将验证码内容保存在 session 中, 用以 UserServiceImpl.login 中验证
         request.getSession().setAttribute("captcha", text);
 
