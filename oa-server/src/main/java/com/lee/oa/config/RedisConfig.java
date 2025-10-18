@@ -10,6 +10,7 @@ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactor
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+
 //import redis.clients.jedis.JedisPool;
 //import redis.clients.jedis.JedisPoolConfig;
 //import java.time.Duration;
@@ -117,7 +118,11 @@ public class RedisConfig {
         }
     }
 
-
+    /**
+     * 创建使用 JSON 序列化器的 RedisTemplate
+     * @param lettuceConnectionFactory Lettuce 连接工厂
+     * @return RedisTemplate
+     */
     @Bean
     public RedisTemplate<String, Object> redisTemplate(LettuceConnectionFactory lettuceConnectionFactory) {
         RedisTemplate<String, Object> template = new RedisTemplate<>();
@@ -148,6 +153,28 @@ public class RedisConfig {
         template.afterPropertiesSet();
         return template;
     }
+
+//    /**
+//     * 创建 RedisSentinelConfiguration 哨兵模式, 等价于 application 的哨兵模式配置
+//     *
+//     * Note: 哨兵模式配置与 application.yml 中配置的哨兵模式配置一致,
+//     * 优先使用 application 配置, 注释代码.
+//     *
+//     * @return RedisSentinelConfiguration 对象
+//     */
+//    @Bean
+//    public RedisSentinelConfiguration redisSentinelConfiguration() {
+//        String[] sentinels = sentinelNodes.split(",");
+//        RedisSentinelConfiguration redisSentinelConfiguration = new RedisSentinelConfiguration()
+//                .master(sentinelMaster)
+//                .sentinel(sentinels[0].split(":")[0], Integer.parseInt(sentinels[0].split(":")[1]))
+//                .sentinel(sentinels[1].split(":")[0], Integer.parseInt(sentinels[1].split(":")[1]))
+//                .sentinel(sentinels[2].split(":")[0], Integer.parseInt(sentinels[2].split(":")[1]));
+//
+//        redisSentinelConfiguration.setPassword(RedisPassword.of(password));
+//        return redisSentinelConfiguration;
+//    }
+
 
 //    /**
 //     * 创建 RedisTemplate
