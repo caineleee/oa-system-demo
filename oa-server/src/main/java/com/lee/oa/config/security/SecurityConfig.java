@@ -1,18 +1,28 @@
 package com.lee.oa.config.security;
 
+import com.lee.oa.config.security.component.CustomFilter;
+import com.lee.oa.config.security.component.CustomUrlDecisionManager;
+import com.lee.oa.config.security.component.JwtRequestFilter;
+import com.lee.oa.config.security.component.RestAccessDeniedHandler;
+import com.lee.oa.config.security.component.RestAuthorizationEntryPoint;
+import com.lee.oa.pojo.User;
 import com.lee.oa.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
@@ -51,6 +61,18 @@ public class SecurityConfig {
     private JwtRequestFilter jwtRequestFilter;
 
     /**
+     * 自定义过滤器, 获取当前请求需要的角色 (权限控制)
+     */
+    @Autowired
+    private CustomFilter customFilter;
+
+    /**
+     *  自定义权限管理器, 用于判断用户是否具有访问某个URL的权限
+     */
+    @Autowired
+    private CustomUrlDecisionManager customUrlDecisionManager;
+
+    /**
      * 配置用户详情服务
      * @return UserDetailsService实例
      */
@@ -58,7 +80,13 @@ public class SecurityConfig {
     public UserDetailsService userDetailsService() {
         return username -> {
             // 从数据库或其他地方加载用户
-            return userService.loadUserByUsername(username);
+            User user = (User) userService.loadUserByUsername(username);
+            if (user != null) {
+                // 加载用户角色信息
+                user.setRoles(userService.getRoles(user.getId().intValue()));
+                return user;
+            }
+            throw new UsernameNotFoundException("用户或密码不正确");
         };
     }
 
@@ -94,6 +122,15 @@ public class SecurityConfig {
                 .antMatchers("/authenticate", "/hello", "/login", "/logout").permitAll()
                 // 其他所有请求都需要认证
                 .anyRequest().authenticated()
+                // 动态权限配置, 用户预判请求和用户的角色权限是否匹配
+                .withObjectPostProcessor(new ObjectPostProcessor<FilterSecurityInterceptor>() {
+                    @Override
+                    public <O extends FilterSecurityInterceptor> O postProcess(O object) {
+                        object.setAccessDecisionManager(customUrlDecisionManager);
+                        object.setSecurityMetadataSource(customFilter);
+                        return object;
+                    }
+                })
                 .and()
                 // 禁用缓存控制
                 .headers().cacheControl().disable()

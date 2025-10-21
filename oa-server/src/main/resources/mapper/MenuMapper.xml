@@ -29,33 +29,62 @@
             <result column="enabled2" property="enabled"/>
         </collection>
     </resultMap>
-    
+
+    <resultMap id="MenusWithRole" type="com.lee.oa.pojo.Menu" extends="BaseResultMap">
+        <collection property="roles" ofType="com.lee.oa.pojo.Role">
+            <id column="role_id" property="id"/>
+            <result column="role_name" property="name"/>
+            <result column="role_name_zh" property="nameZh"/>
+        </collection>
+    </resultMap>
+
     <!-- 根据用户ID查询菜单列表 -->
     <select id="getMenusByUserId" parameterType="java.lang.Long" resultMap="Menus">
         SELECT
         DISTINCT
-        m1.*,
-        m2.id as id2,
-        m2.url as url2,
-        m2.path as path2,
-        m2.component as component2,
-        m2.name as name2,
-        m2.icon_cls as icon2,
-        m2.keep_alive as keep_alive2,
-        m2.require_auth as require_auth2,
-        m2.parent_id as parent_id2,
-        m2.enabled as enabled2
+            m1.*,
+            m2.id as id2,
+            m2.url as url2,
+            m2.path as path2,
+            m2.component as component2,
+            m2.name as name2,
+            m2.icon_cls as icon2,
+            m2.keep_alive as keep_alive2,
+            m2.require_auth as require_auth2,
+            m2.parent_id as parent_id2,
+            m2.enabled as enabled2
         FROM
-        t_menu as m1,
-        t_menu as m2,
-        t_user_role as ur,
-        t_menu_role as mr
+            t_menu as m1,
+            t_menu as m2,
+            t_role as role,
+            t_menu_role as mr
         WHERE
-        m1.id = m2.parent_id
+            m1.id = m2.parent_id
         AND m2.id = mr.menu_id
-        AND mr.role_id = ur.id
-        AND ur.id = #{id}
+        AND mr.role_id = role.id
+        AND role.id = #{id}
         AND m2.enabled = TRUE
+        ORDER BY
+            m2.id
+    </select>
+
+    <!-- 根据角色获取菜单 -->
+    <select id="getMenusWithRole" resultMap="MenusWithRole">
+        SELECT
+            m.*,
+            role.id as role_id,
+            role.name as role_name,
+            role.name_zh as role_name_zh
+        FROM
+            t_menu as m,
+            t_role as role,
+            t_menu_role as mr
+        WHERE
+            m.id = mr.menu_id
+        AND
+            role.id = ur.role_id
+        ORDER BY
+            m.id
     </select>
 
 </mapper>

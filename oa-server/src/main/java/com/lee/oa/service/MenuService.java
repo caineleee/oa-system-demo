@@ -19,4 +19,10 @@ public interface MenuService extends IService<Menu> {
      * @return 当前用户可以访问的菜单列表
      */
     List<Menu> getMenusByUserId();
+
+    /**
+     * 根据当前角色获取菜单
+     * @return 当前角色可以访问的菜单列表
+     */
+    List<Menu> getMenusWithRole();
 }

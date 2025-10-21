@@ -1,4 +1,4 @@
-package com.lee.oa.config.security;
+package com.lee.oa.config.security.component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lee.oa.pojo.Response;

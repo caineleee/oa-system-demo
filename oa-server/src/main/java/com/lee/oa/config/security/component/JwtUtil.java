@@ -1,4 +1,4 @@
-package com.lee.oa.config.security;
+package com.lee.oa.config.security.component;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

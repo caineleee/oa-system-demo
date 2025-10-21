@@ -60,7 +60,7 @@ public class LoginController {
      * @return 当前用户信息
      */
     @ApiOperation("获取当前用户信息")
-    @GetMapping("/getCurrentUser")
+    @GetMapping("/user")
     public User getCurrentUser(Principal  principal) {
         // 检查用户是否已认证
         if (principal == null) {
@@ -72,6 +72,8 @@ public class LoginController {
         User user = (User) userService.loadUserByUsername(username);
         // 清除密码信息，避免密码泄露
         user.setPassword(null);
+        // 加载用户角色信息
+        user.setRoles(userService.getRoles(user.getId().intValue()));
         return user;
     }
 }

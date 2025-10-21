@@ -14,11 +14,13 @@ import lombok.experimental.Accessors;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.util.CollectionUtils;
 
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 
 /**
@@ -105,12 +107,6 @@ public class User implements Serializable, UserDetails {
     @TableField(value = "userFace")
     private String userFace;
 
-    /**
-     * 用户角色，多个角色用逗号分隔
-     */
-    @ApiModelProperty("用户角色")
-    @TableField(value = "roles")
-    private String roles;
 
     /**
      * 备注，用户的附加信息
@@ -118,6 +114,13 @@ public class User implements Serializable, UserDetails {
     @ApiModelProperty("备注")
     @TableField(value = "remark")
     private String remark;
+
+    /**
+     * 角色列表
+     */
+    @ApiModelProperty("角色")
+    @TableField(exist = false)
+    private List<Role> roles;
 
     /**
      * 获取鉴权列表
@@ -129,14 +132,9 @@ public class User implements Serializable, UserDetails {
     @JsonIgnore
     public Collection<? extends GrantedAuthority> getAuthorities() {
         // 如果没有分配角色，默认返回空列表
-        if (roles != null && !roles.isEmpty()) {
-            return Arrays.stream(roles.split(","))
-                    .map(String::trim)
-                    .filter(role -> !role.isEmpty())
-                    .map(SimpleGrantedAuthority::new)
-                    .collect(Collectors.toList());
-        }
-        return Collections.emptyList();
+        return roles.stream()
+                .map(role -> new SimpleGrantedAuthority(role.getName()))
+                .collect(Collectors.toList());
     }
 
     /**

@@ -23,14 +23,17 @@ public class TestController {
         return "Hello, World!";
     }
 
-    /**
-     * 管理员接口，返回管理员问候语
-     * 
-     * @return String 管理员问候语
-     */
-    @GetMapping("/admin")
-    public String admin() {
-        // 返回管理员问候语
-        return "Hello, Admin!";
+    @GetMapping("/employee/basic/hello")
+    public String helloEmployee() {
+        // 默认接口，返回用户ello
+        return "/employee/basic/hello";
     }
+
+    @GetMapping("/employee/advanced/hello")
+    public String helloAdvanced() {
+        // 默认接口，返回用户ello
+        return "/employee/advanced/hello";
+    }
+
+
 }

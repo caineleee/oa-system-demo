@@ -1,4 +1,4 @@
-package com.lee.oa.config.security;
+package com.lee.oa.config.security.component;
 
 import com.lee.oa.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;

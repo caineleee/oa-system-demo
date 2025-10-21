@@ -2,10 +2,11 @@ package com.lee.oa.service.Impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.lee.oa.config.security.JwtUtil;
+import com.lee.oa.config.security.component.JwtUtil;
+import com.lee.oa.mapper.RoleMapper;
 import com.lee.oa.mapper.UserMapper;
-import com.lee.oa.pojo.Menu;
 import com.lee.oa.pojo.Response;
+import com.lee.oa.pojo.Role;
 import com.lee.oa.pojo.User;
 import com.lee.oa.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
      */
     @Autowired
     private UserMapper userMapper;
+
+    /**
+     * 角色Mapper对象，用于数据库操作
+     */
+    @Autowired
+    private RoleMapper roleMapper;
 
     /**
      * JWT 工具类对象，用于生成和验证JWT Token
@@ -117,5 +124,15 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         return userMapper.selectOne(new QueryWrapper<User>()
                 .eq("username", username)
                 .eq("enabled", true));
+    }
+
+    /**
+     * 根据用户ID获取用户角色列表
+     * @param userId 用户ID
+     * @return 用户角色列表
+     */
+    @Override
+    public List<Role> getRoles(Integer userId) {
+        return roleMapper.getRoles(userId);
     }
 }

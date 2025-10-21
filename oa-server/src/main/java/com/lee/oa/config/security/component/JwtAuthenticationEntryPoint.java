@@ -1,4 +1,4 @@
-package com.lee.oa.config.security;
+package com.lee.oa.config.security.component;
 
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;

@@ -2,10 +2,14 @@ package com.lee.oa.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.lee.oa.pojo.Response;
+import com.lee.oa.pojo.Role;
 import com.lee.oa.pojo.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * @ClassName UserService
@@ -27,5 +31,19 @@ public interface UserService extends IService<User>, UserDetailsService {
      * @return HTTP 响应对应，包含登录结果和token信息
      */
     Response login(String username, String password, String code, HttpServletRequest request);
+
+    /**
+     * 根据用户名加载用户详细信息
+     * @param username 用户名
+     * @return 用户详细信息
+     */
+    UserDetails loadUserByUsername(String username);
+
+    /**
+     * 根据用户 ID 获取用户角色列表
+     * @param userId 用户 ID
+     * @return
+     */
+    List<Role> getRoles(Integer userId);
 
 }

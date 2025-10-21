@@ -5,6 +5,8 @@ import com.lee.oa.pojo.Role;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 /**
  * @ClassName RoleMapper
  * @Description 角色Mapper接口，用于操作角色相关数据
@@ -15,4 +17,11 @@ import org.springframework.stereotype.Repository;
 @Mapper
 @Repository
 public interface RoleMapper extends BaseMapper<Role> {
+
+    /**
+     * 根据用户ID获取用户角色列表
+     * @param userId 用户ID
+     * @return 用户角色列表
+     */
+    List<Role> getRoles(Integer userId);
 }
