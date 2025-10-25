@@ -110,7 +110,14 @@ jwt:
   token-expire-time: 86400
 
 # 解决Springfox与Spring Boot 2.6+兼容性问题
-springfox:
-  documentation:
-    swagger-ui:
-      base-url: /
+#springfox:
+#  documentation:
+#    swagger-ui:
+#      base-url: /
+
+# SpringDoc OpenAPI 配置
+springdoc:
+  # 限制只扫描指定包下的Controller
+  packages-to-scan: com.lee.oa.controller
+  # 禁用Actuator端点的文档生成
+  show-actuator: false

@@ -4,8 +4,10 @@ import com.lee.oa.pojo.LoginInfo;
 import com.lee.oa.pojo.Response;
 import com.lee.oa.pojo.User;
 import com.lee.oa.service.UserService;
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
+//import io.swagger.annotations.Api;
+//import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +24,8 @@ import java.security.Principal;
  * @Date 2025/9/21 10:40
  * @Version 1.0
  */
-@Api(tags = "登录控制器")
+//@Api(tags = "登录控制器")
+@Tag(name = "登录控制器", description = "处理用户登录、退出和获取当前用户信息等请求")
 @RestController
 public class LoginController {
 
@@ -36,7 +39,8 @@ public class LoginController {
      * @param request HTTP请求对象
      * @return 登录结果响应
      */
-    @ApiOperation("用户登录")
+//    @ApiOperation("用户登录")
+    @Operation(summary = "用户登录", description = "接收用户名、密码和验证码，验证通过后生成JWT Token")
     @PostMapping("/login")
     public Response login(@RequestBody LoginInfo info, HttpServletRequest  request) {
         // 调用UserService的登录方法进行用户认证
@@ -47,7 +51,8 @@ public class LoginController {
      * 用户退出登录接口
      * @return 退出登录结果响应
      */
-    @ApiOperation("用户退出登录")
+//    @ApiOperation("用户退出登录")
+    @Operation(summary = "用户退出登录", description = "用户退出登录接口")
     @PostMapping("/logout")
     public Response logout() {
         // 直接返回退出登录成功的响应（实际的token清除在前端完成）
@@ -59,7 +64,8 @@ public class LoginController {
      * @param principal 当前认证用户信息
      * @return 当前用户信息
      */
-    @ApiOperation("获取当前用户信息")
+//    @ApiOperation("获取当前用户信息")
+    @Operation(summary = "获取当前用户信息", description = "获取当前认证用户的信息")
     @GetMapping("/user")
     public User getCurrentUser(Principal  principal) {
         // 检查用户是否已认证

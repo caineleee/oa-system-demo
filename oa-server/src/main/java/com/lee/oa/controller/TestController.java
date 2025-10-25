@@ -1,5 +1,7 @@
 package com.lee.oa.controller;
 
+//import io.swagger.annotations.Api;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -9,6 +11,8 @@ import org.springframework.web.bind.annotation.RestController;
  * @author Lee
  * @since 1.0.0
  */
+//@Api(tags = "测试控制器")
+@Tag(name = "测试控制器", description = "用于提供测试接口")
 @RestController
 public class TestController {
 

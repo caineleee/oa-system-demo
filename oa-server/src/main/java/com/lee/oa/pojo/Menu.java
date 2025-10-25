@@ -4,8 +4,9 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+//import io.swagger.annotations.ApiModel;
+//import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -22,49 +23,62 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("t_menu")
-@ApiModel("菜单")
+//@ApiModel("菜单")
+@Schema(name = "菜单", description = "菜单信息实体类")
 public class Menu implements Serializable {
 
-    @ApiModelProperty("菜单ID")
+    //@ApiModelProperty("菜单ID")
+    @Schema(name = "菜单ID", description = "菜单ID")
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
-    @ApiModelProperty("菜单名称")
+    //@ApiModelProperty("菜单名称")
+    @Schema(name = "菜单名称", description = "菜单名称")
     private String name;
 
-    @ApiModelProperty("菜单路径")
+    //@ApiModelProperty("菜单路径")
+    @Schema(name = "菜单路径", description = "菜单路径")
     private String path;
 
-    @ApiModelProperty("菜单URL")
+    //@ApiModelProperty("菜单URL")
+    @Schema(name = "菜单URL", description = "菜单URL")
     private String url;
 
-    @ApiModelProperty("菜单组件")
+    //@ApiModelProperty("菜单组件")
+    @Schema(name = "菜单组件", description = "菜单组件")
     private String component;
 
-    @ApiModelProperty("图标")
+    //@ApiModelProperty("图标")
+    @Schema(name = "图标", description = "图标")
     @TableField(value = "icon_cls")
     private String icon;
 
-    @ApiModelProperty("是否激活")
+    //@ApiModelProperty("是否激活")
+    @Schema(name = "是否激活", description = "是否激活")
     @TableField(value = "keep_alive")
     private Boolean keepAlive;
 
-    @ApiModelProperty("是否需要权限")
+    //@ApiModelProperty("是否需要权限")
+    @Schema(name = "是否需要权限", description = "是否需要权限")
     @TableField(value = "require_auth")
     private Boolean requireAuth;
 
-    @ApiModelProperty("父级ID")
+    //@ApiModelProperty("父级ID")
+    @Schema(name = "父级ID", description = "父级ID")
     @TableField(value = "parent_id")
     private Long parentId;
 
-    @ApiModelProperty("是否启用")
+    //@ApiModelProperty("是否启用")
+    @Schema(name = "是否启用", description = "是否启用")
     private Boolean enabled;
 
-    @ApiModelProperty("子菜单")
+    //@ApiModelProperty("子菜单")
+    @Schema(name = "子菜单", description = "子菜单")
     @TableField(exist = false)
     private List<Menu> children;
 
-    @ApiModelProperty("角色列表")
+    //@ApiModelProperty("角色列表")
+    @Schema(name = "角色列表", description = "角色列表")
     @TableField(exist = false)
     private List<Role> roles;
 

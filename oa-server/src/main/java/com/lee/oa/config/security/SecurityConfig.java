@@ -10,6 +10,7 @@ import com.lee.oa.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.ObjectPostProcessor;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -17,7 +18,6 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -93,12 +93,16 @@ public class SecurityConfig {
     /**
      * 配置认证管理器
      * 设置用户详情服务和密码编码器
-     * @param auth 认证管理器构建器
+     * @param http HttpSecurity对象
      * @throws Exception 配置异常
      */
-    public void configureAuthenticationManager(AuthenticationManagerBuilder auth) throws Exception {
-        // 设置用户详情服务和密码编码器
-        auth.userDetailsService(userDetailsService()).passwordEncoder(new BCryptPasswordEncoder());
+    @Bean
+    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
+        return http.getSharedObject(AuthenticationManagerBuilder.class)
+                .userDetailsService(userDetailsService())
+                .passwordEncoder(new BCryptPasswordEncoder())
+                .and()
+                .build();
     }
 
     /**
@@ -119,7 +123,7 @@ public class SecurityConfig {
                 // 配置URL访问权限
                 .authorizeRequests()
                 // 允许匿名访问的路径
-                .antMatchers("/authenticate", "/hello", "/login", "/logout").permitAll()
+                .antMatchers("/hello", "/login", "/logout").permitAll()
                 // 其他所有请求都需要认证
                 .anyRequest().authenticated()
                 // 动态权限配置, 用户预判请求和用户的角色权限是否匹配
@@ -157,8 +161,11 @@ public class SecurityConfig {
         return (web) -> web.ignoring().antMatchers(
                 // Swagger相关路径
                 "/swagger-ui/**",
+                "/swagger-ui.html",
                 "/swagger-resources/**",
                 "/v2/api-docs",
+                "/v3/api-docs",
+                "/v3/api-docs/**",
                 "/swagger-resources/configuration/ui",
                 "/swagger-resources/configuration/security",
                 "/webjars/**",
@@ -168,7 +175,13 @@ public class SecurityConfig {
                 "/index.html",
                 "/favicon.ico",
                 // 验证码路径
-                "/captcha"
+                "/captcha",
+                // 登录路径
+                "/login",
+                "/logout",
+                // 错误页面路径
+                "/error",
+                "/hello"
         );
     }
 }

@@ -6,11 +6,18 @@
     <resultMap id="BaseResultMap" type="com.lee.oa.pojo.Role">
         <id column="id" property="id" />
         <result column="name" property="name" />
-        <result column="nameZh" property="nameZh" />
+        <result column="name_zh" property="nameZh" />
+    </resultMap>
+
+    <!-- 根据用户ID获取用户角色列表的ResultMap -->
+    <resultMap id="RolesResultMap" type="com.lee.oa.pojo.Role">
+        <id column="role_id" property="id" />
+        <result column="role_name" property="name" />
+        <result column="role_name_zh" property="nameZh" />
     </resultMap>
 
     <!-- 根据用户ID获取用户角色列表 -->
-    <select id="getRoles" resultType="com.lee.oa.pojo.Role">
+    <select id="getRoles" resultMap="RolesResultMap" parameterType="java.lang.Integer">
         SELECT
             role.id as role_id,
             role.name as role_name,
@@ -19,6 +26,6 @@
             t_role as role
             LEFT JOIN t_user_role as ur ON role.id = ur.role_id
         WHERE
-            ur.role_id = #{userId};
+            ur.user_id = #{userId};
     </select>
 </mapper>

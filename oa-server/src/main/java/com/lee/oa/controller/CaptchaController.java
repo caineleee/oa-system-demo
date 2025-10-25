@@ -1,7 +1,10 @@
 package com.lee.oa.controller;
 
 import com.google.code.kaptcha.impl.DefaultKaptcha;
-import io.swagger.annotations.ApiOperation;
+//import io.swagger.annotations.Api;
+//import io.swagger.annotations.ApiOperation;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,13 +23,16 @@ import java.io.IOException;
  * @Date 2025/9/26 09:02
  * @Version 1.0
  */
+//@Api(tags = "验证码控制器")
+@Tag(name = "验证码控制器", description = "生成和管理验证码")
 @RestController
 public class CaptchaController {
 
     @Autowired
     private DefaultKaptcha defaultKaptcha;
 
-    @ApiOperation("获取验证码")
+//    @ApiOperation("获取验证码")
+    @Operation(summary = "获取验证码", description = "生成并返回验证码图片")
     @GetMapping(value = "/captcha", produces = "image/jpeg")
     public String getCaptcha(HttpServletRequest request, HttpServletResponse response) {
         // 定义验证码输出位图片类型

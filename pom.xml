@@ -44,7 +44,9 @@
         <!-- Java版本 -->
         <java.version>17</java.version>
         <!-- Springfox版本 -->
-        <springfox.version>3.0.0</springfox.version>
+<!--        <springfox.version>3.0.0</springfox.version>-->
+        <!-- SpringDoc版本 -->
+        <springdoc.version>1.6.14</springdoc.version>
     </properties>
 
     <!-- 仓库配置 -->
@@ -139,10 +141,19 @@
 
 
         <!-- 使用Springfox Boot Starter替代单独的swagger2和swagger-ui依赖 -->
+        <!--
         <dependency>
             <groupId>io.springfox</groupId>
             <artifactId>springfox-boot-starter</artifactId>
             <version>${springfox.version}</version>
+        </dependency>
+        -->
+
+        <!-- 使用SpringDoc OpenAPI替代Springfox -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>${springdoc.version}</version>
         </dependency>
 
         <!-- Spring Boot测试启动器 -->

@@ -36,6 +36,7 @@ services:
       timeout: 10s
       # 重试次数
       retries: 3
+      start_period: 40s
 
   # Redis 主节点服务
   redis-master:
@@ -77,6 +78,7 @@ services:
       timeout: 10s
       # 重试次数
       retries: 3
+      start_period: 20s
 
   # Redis 从节点1服务
   redis-slave1:
@@ -98,7 +100,8 @@ services:
       - redis_slave1_data:/data
     # 依赖关系，确保主节点先启动
     depends_on:
-      - redis-master
+      redis-master:
+        condition: service_healthy
     # Redis 启动命令参数
     command: >
       redis-server
@@ -115,13 +118,14 @@ services:
       --masterauth root
       --loglevel verbose
     healthcheck:
-      test: [ "CMD", "redis-cli", "ping" ]
+      test: [ "CMD", "redis-cli", "-p", "6380", "ping" ]
       # 检查间隔
       interval: 60s
       # 超时时间
       timeout: 10s
       # 重试次数
       retries: 3
+      start_period: 20s
 
   # Redis 从节点2服务
   redis-slave2:
@@ -143,7 +147,8 @@ services:
       - redis_slave2_data:/data
     # 依赖关系，确保主节点先启动
     depends_on:
-      - redis-master
+      redis-master:
+        condition: service_healthy
     # Redis 启动命令参数
     command: >
       redis-server
@@ -160,13 +165,14 @@ services:
       --masterauth root
       --loglevel verbose
     healthcheck:
-      test: [ "CMD", "redis-cli", "ping" ]
+      test: [ "CMD", "redis-cli", "-p", "6381", "ping" ]
       # 检查间隔
       interval: 60s
       # 超时时间
       timeout: 10s
       # 重试次数
       retries: 3
+      start_period: 20s
 
   # Redis Sentinel 1 服务
   redis-sentinel1:
@@ -203,6 +209,12 @@ services:
         echo 'sentinel auth-pass mymaster root' >> /tmp/sentinel.conf &&
         redis-sentinel /tmp/sentinel.conf
       "
+    healthcheck:
+      test: [ "CMD", "redis-cli", "-p", "26379", "ping" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
 
   # Redis Sentinel 2 服务
   redis-sentinel2:
@@ -239,6 +251,12 @@ services:
         echo 'sentinel auth-pass mymaster root' >> /tmp/sentinel.conf &&
         redis-sentinel /tmp/sentinel.conf
       "
+    healthcheck:
+      test: [ "CMD", "redis-cli", "-p", "26379", "ping" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
 
   # Redis Sentinel 3 服务
   redis-sentinel3:
@@ -275,6 +293,12 @@ services:
         echo 'sentinel auth-pass mymaster root' >> /tmp/sentinel.conf &&
         redis-sentinel /tmp/sentinel.conf
       "
+    healthcheck:
+      test: [ "CMD", "redis-cli", "-p", "26379", "ping" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 20s
 
 # 数据卷定义
 volumes:

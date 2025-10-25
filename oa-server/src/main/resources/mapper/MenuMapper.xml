@@ -41,7 +41,7 @@
     <!-- 根据用户ID查询菜单列表 -->
     <select id="getMenusByUserId" parameterType="java.lang.Long" resultMap="Menus">
         SELECT
-        DISTINCT
+            DISTINCT
             m1.*,
             m2.id as id2,
             m2.url as url2,
@@ -56,14 +56,14 @@
         FROM
             t_menu as m1,
             t_menu as m2,
-            t_role as role,
+            t_user_role as ur,
             t_menu_role as mr
         WHERE
             m1.id = m2.parent_id
-        AND m2.id = mr.menu_id
-        AND mr.role_id = role.id
-        AND role.id = #{id}
-        AND m2.enabled = TRUE
+            AND m2.id = mr.menu_id
+            AND mr.role_id = ur.role_id
+            AND ur.user_id = #{id}
+            AND m2.enabled = TRUE
         ORDER BY
             m2.id
     </select>
@@ -82,7 +82,7 @@
         WHERE
             m.id = mr.menu_id
         AND
-            role.id = ur.role_id
+            role.id = mr.role_id
         ORDER BY
             m.id
     </select>

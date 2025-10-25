@@ -4,8 +4,9 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+//import io.swagger.annotations.ApiModel;
+//import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -21,7 +22,8 @@ import java.io.Serializable;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("t_user_role")
-@ApiModel("用户角色关联")
+//@ApiModel("用户角色关联")
+@Schema(name = "用户角色关联", description = "用户角色关联信息实体类")
 public class UserRole implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -29,21 +31,24 @@ public class UserRole implements Serializable {
     /**
      * 主键ID，自增
      */
-    @ApiModelProperty("主键ID")
+    //@ApiModelProperty("主键ID")
+    @Schema(name = "主键ID", description = "主键ID，自增")
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     /**
      * 用户ID
      */
-    @ApiModelProperty("用户ID")
+    //@ApiModelProperty("用户ID")
+    @Schema(name = "用户ID", description = "用户ID")
     @TableField(value = "user_id")
     private Long userId;
 
     /**
      * 角色ID
      */
-    @ApiModelProperty("角色ID")
+    //@ApiModelProperty("角色ID")
+    @Schema(name = "角色ID", description = "角色ID")
     @TableField(value = "role_id")
     private Long roleId;
 }

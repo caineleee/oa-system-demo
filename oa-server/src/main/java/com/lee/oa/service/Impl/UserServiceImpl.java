@@ -121,9 +121,13 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         // 构造查询条件，查询用户名匹配且启用状态为true的用户
-        return userMapper.selectOne(new QueryWrapper<User>()
+        User user = userMapper.selectOne(new QueryWrapper<User>()
                 .eq("username", username)
                 .eq("enabled", true));
+        if (user != null && user.getRoles() == null) {
+            user.setRoles(getRoles(user.getId().intValue()));
+        }
+        return user;
     }
 
     /**
