@@ -71,7 +71,7 @@ services:
       --masterauth root
       --loglevel verbose
     healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
+      test: ["CMD", "redis-cli", "-a", "root", "ping"]
       # 检查间隔
       interval: 60s
       # 超时时间
@@ -90,7 +90,7 @@ services:
     restart: unless-stopped
     # 端口映射
     ports:
-      - "6380:6380"
+      - "6380:6379"
     # 网络配置
     networks:
       - redis-net
@@ -105,7 +105,7 @@ services:
     # Redis 启动命令参数
     command: >
       redis-server
-      --port 6380
+      --port 6379
       --protected-mode no
       --daemonize no
       --dir /data
@@ -118,7 +118,7 @@ services:
       --masterauth root
       --loglevel verbose
     healthcheck:
-      test: [ "CMD", "redis-cli", "-p", "6380", "ping" ]
+      test: [ "CMD", "redis-cli", "-a", "root", "ping" ]
       # 检查间隔
       interval: 60s
       # 超时时间
@@ -137,7 +137,7 @@ services:
     restart: unless-stopped
     # 端口映射
     ports:
-      - "6381:6381"
+      - "6381:6379"
     # 网络配置
     networks:
       - redis-net
@@ -152,7 +152,7 @@ services:
     # Redis 启动命令参数
     command: >
       redis-server
-      --port 6381
+      --port 6379
       --protected-mode no
       --daemonize no
       --dir /data
@@ -165,7 +165,7 @@ services:
       --masterauth root
       --loglevel verbose
     healthcheck:
-      test: [ "CMD", "redis-cli", "-p", "6381", "ping" ]
+      test: [ "CMD", "redis-cli", "-a", "root", "ping" ]
       # 检查间隔
       interval: 60s
       # 超时时间
@@ -210,7 +210,7 @@ services:
         redis-sentinel /tmp/sentinel.conf
       "
     healthcheck:
-      test: [ "CMD", "redis-cli", "-p", "26379", "ping" ]
+      test: [ "CMD", "redis-cli", "-p", "26379", "-a", "root", "ping" ]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -252,7 +252,7 @@ services:
         redis-sentinel /tmp/sentinel.conf
       "
     healthcheck:
-      test: [ "CMD", "redis-cli", "-p", "26379", "ping" ]
+      test: [ "CMD", "redis-cli", "-p", "26379", "-a", "root", "ping" ]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -294,7 +294,7 @@ services:
         redis-sentinel /tmp/sentinel.conf
       "
     healthcheck:
-      test: [ "CMD", "redis-cli", "-p", "26379", "ping" ]
+      test: [ "CMD", "redis-cli", "-p", "26379", "-a", "root", "ping" ]
       interval: 30s
       timeout: 10s
       retries: 3
