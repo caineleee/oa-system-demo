@@ -74,7 +74,7 @@ tmp/
 # 测试文件
 *.test
 # 测试类目录
-oa-server/src/test/**
+#oa-server/src/test/**
 
 # 其他开发工具文件
 # Eclipse设置文件
