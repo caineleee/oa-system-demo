@@ -32,8 +32,9 @@ public class RestAccessDeniedHandler implements AccessDeniedHandler {
      * @throws ServletException Servlet异常
      */
     @Override
-    public void handle(HttpServletRequest request, HttpServletResponse response,
-                       AccessDeniedException accessDeniedException) throws IOException, ServletException {
+    public void handle(HttpServletRequest request,
+                       HttpServletResponse response,
+                       AccessDeniedException accessDeniedException) throws IOException {
         // 设置响应字符编码和内容类型
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");

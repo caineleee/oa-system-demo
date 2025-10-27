@@ -44,14 +44,6 @@ public class CustomFilter implements FilterInvocationSecurityMetadataSource {
         // 获取请求的 URL (object 就是当前请求 FilterInvocation 对象, 可以直接获取请求信息)
         String requestUrl = ((FilterInvocation) object).getRequestUrl();
 
-//        // 获取当前认证信息
-//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-//        // 检查是否有有效的认证信息
-//        if (authentication == null || !authentication.isAuthenticated() || authentication instanceof AnonymousAuthenticationToken) {
-//            // 如果没有有效的认证信息，返回默认角色
-//            return SecurityConfig.createList("ROLE_LOGIN");
-//        }
-
         List<Menu> menus = menuService.getMenusWithRole();
         for (Menu menu : menus) {
             // 判断请求 URL 与 菜单 URL 是否匹配

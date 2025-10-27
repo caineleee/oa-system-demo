@@ -44,9 +44,9 @@ public class CustomUrlDecisionManager implements AccessDecisionManager {
                 // 判断用户是否登录
                 if (authentication instanceof AnonymousAuthenticationToken) {
                     throw new AccessDeniedException("用户尚未登录, 请先登录");
-                } //else {
-//                    return;
-//                }
+                } else {
+                    return;
+                }
             }
             // 判断用户角色是否为 URL 所需要的角色
             Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();

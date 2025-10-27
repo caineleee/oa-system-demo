@@ -32,8 +32,9 @@ public class RestAuthorizationEntryPoint implements AuthenticationEntryPoint {
      * @throws ServletException Servlet异常
      */
     @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response,
-                         AuthenticationException authException) throws IOException, ServletException {
+    public void commence(HttpServletRequest request,
+                         HttpServletResponse response,
+                         AuthenticationException authException) throws IOException {
         // 设置响应字符编码和内容类型
         response.setCharacterEncoding("UTF-8");
         response.setContentType("application/json");

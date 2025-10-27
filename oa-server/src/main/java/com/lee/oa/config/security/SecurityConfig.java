@@ -123,7 +123,7 @@ public class SecurityConfig {
                 // 配置URL访问权限
                 .authorizeRequests()
                 // 允许匿名访问的路径
-                .antMatchers("/hello", "/login", "/logout").permitAll()
+//                .antMatchers("/hello", "/login", "/logout").permitAll()
                 // 其他所有请求都需要认证
                 .anyRequest().authenticated()
                 // 动态权限配置, 用户预判请求和用户的角色权限是否匹配
