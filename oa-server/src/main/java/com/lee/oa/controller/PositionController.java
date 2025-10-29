@@ -28,7 +28,7 @@ import java.util.List;
  */
 @RestController
 @Tag(name = "职位控制器", description = "职位管理")
-@RequestMapping("/system/cfg/pos")
+@RequestMapping("/system/basic/pos")
 public class PositionController {
 
     @Autowired
