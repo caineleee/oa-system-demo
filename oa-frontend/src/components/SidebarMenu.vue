@@ -7,30 +7,37 @@
         class="menu-item"
     >
       <!-- 一级菜单 -->
-      <div class="menu-level-1">
+      <div class="menu-level-1" @click="toggleMenu(menu)">
         <i v-if="menu.icon" :class="menu.icon" class="menu-icon"></i>
         <span class="menu-title">{{ menu.name }}</span>
+        <i 
+          v-if="menu.children && menu.children.length > 0" 
+          class="arrow-icon"
+          :class="{ 'rotated': menu.expanded }"
+        >▼</i>
       </div>
 
       <!-- 二级菜单 -->
-      <div
-          v-if="menu.children && menu.children.length > 0"
-          class="submenu-container"
-      >
+      <transition name="slide">
         <div
-            v-for="child in menu.children"
-            :key="`child-${child.id}`"
-            class="menu-level-2"
+            v-if="menu.children && menu.children.length > 0 && menu.expanded"
+            class="submenu-container"
         >
-          <router-link
-              :to="getMenuPath(child)"
-              class="submenu-link"
-              active-class="active"
+          <div
+              v-for="child in menu.children"
+              :key="`child-${child.id}`"
+              class="menu-level-2"
           >
-            <span class="submenu-title">{{ child.name }}</span>
-          </router-link>
+            <router-link
+                :to="getMenuPath(child)"
+                class="submenu-link"
+                active-class="active"
+            >
+              <span class="submenu-title">{{ child.name }}</span>
+            </router-link>
+          </div>
         </div>
-      </div>
+      </transition>
     </div>
 
     <!-- 如果没有菜单数据，显示提示 -->
@@ -90,21 +97,30 @@ export default {
 
       console.log('原始菜单数据:', menus);
 
-      // 直接过滤掉不需要的菜单项
+      // 过滤掉 id=1 和 id=29 的菜单项
       const filteredMenus = menus.filter(menu => {
-        if (!menu || !menu.id) return false;
-
-        // 过滤掉不需要的菜单
-        if (menu.name === '所有' || menu.id === 29) return false;
-
-        // 只保留parentId为1的菜单（根据您的数据结构）
-        if (menu.parentId === 1) return true;
-
-        return false;
+        // 过滤掉 id 为 1 和 29 的菜单
+        return menu && menu.id && menu.id !== 1 && menu.id !== 29;
       });
 
-      console.log('过滤后的菜单:', filteredMenus);
-      return filteredMenus;
+      // 为每个菜单项添加expanded属性，默认为false（不展开）
+      const processedMenus = filteredMenus.map(menu => {
+        return {
+          ...menu,
+          expanded: false // 默认不展开二级菜单
+        };
+      });
+
+      console.log('过滤并处理后的菜单数据:', processedMenus);
+      return processedMenus;
+    },
+
+    // 切换菜单展开状态
+    toggleMenu(menu) {
+      // 只有当菜单有子菜单时才切换展开状态
+      if (menu.children && menu.children.length > 0) {
+        menu.expanded = !menu.expanded;
+      }
     }
   }
 };
@@ -136,6 +152,12 @@ export default {
   color: #333333;
   background-color: #f8fafc;
   border-left: 4px solid #2d8cf0;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.menu-level-1:hover {
+  background-color: #eef7ff;
 }
 
 .menu-icon {
@@ -150,9 +172,33 @@ export default {
   flex: 1;
 }
 
+.arrow-icon {
+  font-size: 12px;
+  color: #999;
+  transition: transform 0.3s ease;
+}
+
+.arrow-icon.rotated {
+  transform: rotate(180deg);
+}
+
 /* 二级菜单容器 */
 .submenu-container {
   background-color: #ffffff;
+}
+
+/* 展开动画 */
+.slide-enter-active,
+.slide-leave-active {
+  transition: all 0.3s ease;
+  max-height: 500px;
+  overflow: hidden;
+}
+
+.slide-enter,
+.slide-leave-to {
+  max-height: 0;
+  opacity: 0;
 }
 
 /* 二级菜单项 */
