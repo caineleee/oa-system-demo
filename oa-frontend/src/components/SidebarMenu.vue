@@ -10,8 +10,8 @@
       <div class="menu-level-1" @click="toggleMenu(menu)">
         <i v-if="menu.icon" :class="menu.icon" class="menu-icon"></i>
         <span class="menu-title">{{ menu.name }}</span>
-        <i 
-          v-if="menu.children && menu.children.length > 0" 
+        <i
+          v-if="menu.children && menu.children.length > 0"
           class="arrow-icon"
           :class="{ 'rotated': menu.expanded }"
         >▼</i>
@@ -33,6 +33,7 @@
                 class="submenu-link"
                 active-class="active"
             >
+              <i v-if="child.icon" :class="child.icon" class="submenu-icon"></i>
               <span class="submenu-title">{{ child.name }}</span>
             </router-link>
           </div>
@@ -52,7 +53,8 @@ export default {
   name: 'SidebarMenu',
   data() {
     return {
-      processedMenus: []
+      processedMenus: [],
+      isCollapsed: false // 新增：控制侧边栏是否折叠
     };
   },
   mounted() {
@@ -105,8 +107,21 @@ export default {
 
       // 为每个菜单项添加expanded属性，默认为false（不展开）
       const processedMenus = filteredMenus.map(menu => {
+        // 确保icon字段存在并且格式正确
+        let iconClass = '';
+        if (menu.icon) {
+          // 如果icon字段已经有正确的CSS类名，则直接使用
+          if (menu.icon.includes('fa')) {
+            iconClass = menu.icon;
+          } else {
+            // 如果icon字段只是简单的图标名称，添加Font Awesome前缀
+            iconClass = 'fas fa-' + menu.icon;
+          }
+        }
+
         return {
           ...menu,
+          icon: iconClass,
           expanded: false // 默认不展开二级菜单
         };
       });
@@ -121,6 +136,11 @@ export default {
       if (menu.children && menu.children.length > 0) {
         menu.expanded = !menu.expanded;
       }
+    },
+
+    // 新增：切换侧边栏折叠状态
+    toggleCollapse() {
+      this.isCollapsed = !this.isCollapsed;
     }
   }
 };
@@ -129,7 +149,7 @@ export default {
 <style scoped>
 /* 侧边栏菜单容器 */
 .sidebar-menu {
-  width: 240px;
+  width: 210px;
   background-color: #ffffff;
   border-right: 1px solid #eaeaea;
   height: calc(100vh - 60px);
@@ -252,5 +272,14 @@ export default {
 
 .sidebar-menu::-webkit-scrollbar-thumb:hover {
   background: #a8a8a8;
+}
+
+/* 二级菜单图标 */
+.submenu-icon {
+  margin-right: 8px;
+  font-size: 14px;
+  color: #2d8cf0;
+  width: 14px;
+  text-align: center;
 }
 </style>

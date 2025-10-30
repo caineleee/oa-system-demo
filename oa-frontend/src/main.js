@@ -2,6 +2,7 @@ import Vue from 'vue'
 import App from './App.vue'
 import router from './router'
 import axios from 'axios'
+import '@fortawesome/fontawesome-free/css/all.css'
 
 // 设置 axios 的默认基础 URL
 axios.defaults.baseURL = ''
