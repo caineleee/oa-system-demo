@@ -33,7 +33,21 @@ module.exports = {
         logLevel: 'debug'
       },
       // 获取当前用户信息接口代理
-      '/getCurrentUser': {
+      '/user': {
+        target: 'http://localhost:8081',
+        changeOrigin: true,
+        secure: false,
+        logLevel: 'debug'
+      },
+      // 系统配置相关接口代理
+      '/system': {
+        target: 'http://localhost:8081',
+        changeOrigin: true,
+        secure: false,
+        logLevel: 'debug'
+      },
+      // API接口代理 (通用)
+      '/api': {
         target: 'http://localhost:8081',
         changeOrigin: true,
         secure: false,

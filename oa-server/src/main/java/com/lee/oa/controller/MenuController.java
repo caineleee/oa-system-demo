@@ -23,7 +23,7 @@ import java.util.List;
 //@Api(tags = "菜单控制器")
 @Tag(name = "菜单控制器", description = "前端菜单相关接口")
 @RestController
-@RequestMapping("/system/cfg")
+@RequestMapping("/system/config")
 public class MenuController {
 
     @Autowired

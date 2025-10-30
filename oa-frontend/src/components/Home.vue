@@ -18,16 +18,27 @@
       </div>
     </header>
     <!-- 页面主体内容 -->
-    <main>
-      <h1>Welcome to OA System</h1>
-      <p>This is the home page. You have successfully logged in.</p>
-    </main>
+    <div class="main-content">
+      <!-- 侧边栏菜单 -->
+      <sidebar-menu class="sidebar"></sidebar-menu>
+
+      <!-- 主内容区域 -->
+      <main>
+        <router-view></router-view>
+      </main>
+    </div>
   </div>
 </template>
 
 <script>
+// 引入侧边栏菜单组件
+import SidebarMenu from './SidebarMenu.vue'; // 根据实际路径调整
 // 首页组件
 export default {
+  // 注册组件
+  components: {
+    SidebarMenu
+  },
   // 组件数据
   data() {
     return {
@@ -75,7 +86,7 @@ export default {
     // 获取当前用户信息
     getCurrentUser() {
       // 获取当前用户信息
-      this.$http.get('/getCurrentUser')
+      this.$http.get('/user')
         .then(response => {
           // 处理响应数据
           if (response.data) {
@@ -155,6 +166,18 @@ header h1 {
   margin: 0;
   font-size: 1.5rem;
   color: #333;
+}
+
+/* 主体内容容器 */
+.main-content {
+  display: flex;
+  flex: 1;
+  overflow: hidden; /* 防止内容溢出 */
+}
+
+/* 侧边栏样式 */
+.sidebar {
+  flex-shrink: 0; /* 防止侧边栏被压缩 */
 }
 
 /* 用户菜单容器样式 */

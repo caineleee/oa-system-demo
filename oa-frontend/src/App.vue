@@ -1,18 +1,32 @@
 <template>
   <div id="app">
-    <!-- 应用程序根路由视图 -->
-    <router-view></router-view>
+    <router-view/>
   </div>
 </template>
 
 <script>
-// 根应用程序组件
 export default {
-  // 组件名称
-  name: 'App',
-};
+  name: 'App'
+}
 </script>
 
 <style>
 /* 全局样式 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.42857143;
+  color: #333;
+  background-color: #fff;
+}
+
+#app {
+  height: 100vh;
+}
 </style>

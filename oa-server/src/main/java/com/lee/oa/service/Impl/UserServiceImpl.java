@@ -90,12 +90,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
             // 用户被禁用时返回错误信息
             return Response.error("用户账号被禁用, 请联系管理员");
         }
-        // 验证JWT Token是否有效
-        if (request.getHeader("Authorization") != null
-                && !jwtUtil.validateToken(request.getHeader("Authorization"), userDetails)) {
-            // Token过期时返回错误信息
-            return Response.error("Token 已过期, 请重新登录");
-        }
+        // 登录接口不需要验证JWT Token，这是获取新Token的地方
 
         // 创建 Spring Security 认证对象，包含用户信息和权限列表
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(

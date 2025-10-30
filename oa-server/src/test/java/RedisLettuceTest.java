@@ -56,7 +56,6 @@ public class RedisLettuceTest {
                 .setAddress("China")
                 .setEnabled(true)
                 .setUserFace("https://avatars.githubusercontent.com/u/10252602?v=4")
-                .setRoles("ROLE_USER")
                 .setRemark("Lee is a good boy");
 
         // 使用 redisConfig 创建的 JSON 格式序列化对象 RedisTemplate 处理数据,

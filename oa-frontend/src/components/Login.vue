@@ -26,6 +26,7 @@
       </div>
       <button type="submit">Login</button>
     </form>
+    <div v-if="errorMessage" class="error-message">{{ errorMessage }}</div>
   </div>
 </template>
 
@@ -37,7 +38,8 @@ export default {
       password: '',
       captcha: '',
       rememberMe: false,
-      captchaUrl: '/captcha'
+      captchaUrl: '/captcha',
+      errorMessage: ''
     };
   },
   mounted() {
@@ -46,6 +48,9 @@ export default {
   },
   methods: {
     handleLogin() {
+      // 清除之前的错误信息
+      this.errorMessage = '';
+      
       // 构造登录请求数据
       const loginData = {
         username: this.username,
@@ -59,12 +64,12 @@ export default {
           // 处理登录响应
           if (response.data.code === 200) {
             // 登录成功后的处理逻辑
-            alert('Login successful!');
+            console.log('Login successful!', response.data);
             // 保存 token 到本地存储已在拦截器中处理
             this.$router.push('/home');
           } else {
             // 登录失败的处理逻辑
-            alert('Login failed: ' + response.data.message);
+            this.errorMessage = 'Login failed: ' + response.data.message;
             // 刷新验证码
             this.refreshCaptcha();
           }
@@ -72,7 +77,16 @@ export default {
         .catch(error => {
           // 处理登录异常
           console.error('Login error:', error);
-          alert('Login failed: ' + (error.response?.data?.message || error.message));
+          if (error.response) {
+            // 服务器返回了错误响应
+            this.errorMessage = 'Login failed: ' + (error.response.data.message || error.response.statusText);
+          } else if (error.request) {
+            // 请求已发出但没有收到响应
+            this.errorMessage = 'Network error: Unable to connect to server';
+          } else {
+            // 其他错误
+            this.errorMessage = 'Login failed: ' + error.message;
+          }
           // 刷新验证码
           this.refreshCaptcha();
         });
@@ -149,5 +163,14 @@ button {
 
 button:hover {
   background-color: #0056b3;
+}
+
+.error-message {
+  color: #dc3545;
+  background-color: #f8d7da;
+  border: 1px solid #f5c6cb;
+  padding: 10px;
+  border-radius: 4px;
+  margin-top: 15px;
 }
 </style>
