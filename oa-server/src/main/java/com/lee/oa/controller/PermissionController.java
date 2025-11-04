@@ -8,6 +8,7 @@ import com.lee.oa.service.IMenuRoleService;
 import com.lee.oa.service.IRoleService;
 import com.lee.oa.service.IMenuService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,6 +32,7 @@ import java.util.stream.Collectors;
  * @Date 2025/10/31 18:06
  * @Version 1.0
  */
+@Tag(name = "权限组控制器")
 @RestController
 @RequestMapping("/system/basic/permission")
 public class PermissionController {

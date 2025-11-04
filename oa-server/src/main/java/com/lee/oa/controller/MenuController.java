@@ -1,6 +1,7 @@
 package com.lee.oa.controller;
 
 import com.lee.oa.pojo.Menu;
+import com.lee.oa.pojo.Response;
 import com.lee.oa.service.IMenuService;
 //import io.swagger.annotations.Api;
 //import io.swagger.annotations.ApiOperation;
@@ -32,7 +33,7 @@ public class MenuController {
 //    @ApiOperation("根据用户 ID 获取菜单列表")
     @Operation(summary = "根据用户 ID 获取菜单列表", description = "根据当前认证用户 ID 获取其可访问的菜单列表")
     @GetMapping("/menu")
-    public List<Menu> getMenusByUserId() {
-        return menuService.getMenusByUserId();
+    public Response getMenusByUserId() {
+        return Response.success("success", menuService.getMenusByUserId());
     }
 }

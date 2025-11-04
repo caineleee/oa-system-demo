@@ -36,8 +36,8 @@ public class JobLevelController {
 
     @Operation(summary = "获取所有职称")
     @GetMapping("/")
-    public List<JobLevel> getAllJobLevels() {
-        return jobLevelService.list();
+    public Response getAllJobLevels() {
+        return Response.success("success", jobLevelService.list());
     }
 
     @Operation(summary = "添加职称")

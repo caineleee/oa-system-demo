@@ -36,8 +36,8 @@ public class PositionController {
 
     @Operation(summary = "获取所有职位信息")
     @GetMapping("/")
-    public List<Position> getAllPositions() {
-        return positionService.list();
+    public Response getAllPositions() {
+        return Response.success("success", positionService.list());
     }
 
     @Operation(summary = "添加职位信息")
