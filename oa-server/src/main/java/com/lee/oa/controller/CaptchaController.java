@@ -49,7 +49,7 @@ public class CaptchaController {
             response.setHeader("captcha",  text);
         }
 
-        // 将验证码内容保存在 session 中, 用以 UserServiceImpl.login 中验证
+        // 将验证码内容保存在 session 中, 用以 IUserServiceImpl.login 中验证
         request.getSession().setAttribute("captcha", text);
 
         BufferedImage image = defaultKaptcha.createImage(text);

@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lee.oa.mapper.MenuMapper;
 import com.lee.oa.pojo.Menu;
 import com.lee.oa.pojo.User;
-import com.lee.oa.service.MenuService;
+import com.lee.oa.service.IMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
@@ -15,14 +15,14 @@ import org.springframework.util.CollectionUtils;
 import java.util.List;
 
 /**
- * @ClassName MenuServiceImpl
+ * @ClassName IMenuServiceImpl
  * @Description 菜单服务接口, 定义菜单相关业务操作方法
  * @Author lihongliang
  * @Date 2025/9/28 11:19
  * @Version 1.0
  */
 @Service
-public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements MenuService {
+public class IMenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IMenuService {
 
     @Autowired
     private MenuMapper menuMapper;
@@ -57,6 +57,11 @@ public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements Me
     @Override
     public List<Menu> getMenusWithRole() {
         return menuMapper.getMenusWithRole();
+    }
+
+    @Override
+    public List<Menu> getAllMenus() {
+        return menuMapper.getAllMenus();
     }
 
 }

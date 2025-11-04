@@ -38,53 +38,82 @@
         </collection>
     </resultMap>
 
+    <resultMap id="getAllMenus" type="com.lee.oa.pojo.Menu" extends="BaseResultMap">
+        <id column="level1_id" property="id"/>
+        <result column="level1_name" property="name"/>
+        <collection property="children" ofType="com.lee.oa.pojo.Menu">
+            <id column="level2_id" property="id"/>
+            <result column="level2_name" property="name"/>
+            <collection property="children" ofType="com.lee.oa.pojo.Menu">
+                <id column="level3_id" property="id"/>
+                <result column="level3_name" property="name"/>
+            </collection>
+        </collection>
+    </resultMap>
+
     <!-- 根据用户ID查询菜单列表 -->
     <select id="getMenusByUserId" parameterType="java.lang.Long" resultMap="Menus">
         SELECT
-            DISTINCT
-            m1.*,
-            m2.id as id2,
-            m2.url as url2,
-            m2.path as path2,
-            m2.component as component2,
-            m2.name as name2,
-            m2.icon_cls as icon2,
-            m2.keep_alive as keep_alive2,
-            m2.require_auth as require_auth2,
-            m2.parent_id as parent_id2,
-            m2.enabled as enabled2
+        DISTINCT
+        m1.*,
+        m2.id as id2,
+        m2.url as url2,
+        m2.path as path2,
+        m2.component as component2,
+        m2.name as name2,
+        m2.icon_cls as icon2,
+        m2.keep_alive as keep_alive2,
+        m2.require_auth as require_auth2,
+        m2.parent_id as parent_id2,
+        m2.enabled as enabled2
         FROM
-            t_menu as m1,
-            t_menu as m2,
-            t_user_role as ur,
-            t_menu_role as mr
+        t_menu as m1,
+        t_menu as m2,
+        t_user_role as ur,
+        t_menu_role as mr
         WHERE
-            m1.id = m2.parent_id
-            AND m2.id = mr.menu_id
-            AND mr.role_id = ur.role_id
-            AND ur.user_id = #{id}
-            AND m2.enabled = TRUE
+        m1.id = m2.parent_id
+        AND m2.id = mr.menu_id
+        AND mr.role_id = ur.role_id
+        AND ur.user_id = #{id}
+        AND m2.enabled = TRUE
         ORDER BY
-            m2.id
+        m2.id
     </select>
 
     <!-- 根据角色获取菜单 -->
     <select id="getMenusWithRole" resultMap="MenusWithRole">
         SELECT
-            m.*,
-            role.id as role_id,
-            role.name as role_name,
-            role.name_zh as role_name_zh
+        m.*,
+        role.id as role_id,
+        role.name as role_name,
+        role.name_zh as role_name_zh
         FROM
-            t_menu as m,
-            t_role as role,
-            t_menu_role as mr
+        t_menu as m,
+        t_role as role,
+        t_menu_role as mr
         WHERE
-            m.id = mr.menu_id
+        m.id = mr.menu_id
         AND
-            role.id = mr.role_id
+        role.id = mr.role_id
         ORDER BY
-            m.id
+        m.id
+    </select>
+
+    <select id="getAllMenus" resultMap="getAllMenus">
+        SELECT
+        m1.id as level1_id,
+        m1.name as level1_name,
+        m2.id as level2_id,
+        m2.name as level2_name,
+        m3.id as level3_id,
+        m3.name as level3_name
+        FROM
+        `oa-sys-database`.t_menu as m1
+        LEFT JOIN `oa-sys-database`.t_menu as m2 ON m1.id = m2.parent_id
+        LEFT JOIN `oa-sys-database`.t_menu as m3 ON m2.id = m3.parent_id
+        WHERE
+        m3.enabled = true;
     </select>
 
 </mapper>

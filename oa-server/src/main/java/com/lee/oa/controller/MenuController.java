@@ -1,7 +1,7 @@
 package com.lee.oa.controller;
 
 import com.lee.oa.pojo.Menu;
-import com.lee.oa.service.MenuService;
+import com.lee.oa.service.IMenuService;
 //import io.swagger.annotations.Api;
 //import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,7 +27,7 @@ import java.util.List;
 public class MenuController {
 
     @Autowired
-    private MenuService menuService;
+    private IMenuService menuService;
 
 //    @ApiOperation("根据用户 ID 获取菜单列表")
     @Operation(summary = "根据用户 ID 获取菜单列表", description = "根据当前认证用户 ID 获取其可访问的菜单列表")

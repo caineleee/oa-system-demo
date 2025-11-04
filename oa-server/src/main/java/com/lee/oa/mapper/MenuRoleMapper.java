@@ -3,7 +3,10 @@ package com.lee.oa.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.lee.oa.pojo.MenuRole;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 /**
  * @ClassName MenuRoleMapper
@@ -15,4 +18,13 @@ import org.springframework.stereotype.Repository;
 @Mapper
 @Repository
 public interface MenuRoleMapper extends BaseMapper<MenuRole> {
+
+    /**
+     * 批量更新角色菜单关系
+     * @param roleId 角色ID
+     * @param menuIds 菜单ID列表
+     * @return 更新的记录数
+     */
+    Integer insertRecords(@Param("roleId") Integer roleId,
+                          @Param("menuIds") List<Integer> menuIds);
 }

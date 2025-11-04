@@ -6,19 +6,18 @@ import com.lee.oa.pojo.Role;
 import com.lee.oa.pojo.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
- * @ClassName UserService
+ * @ClassName IUserService
  * @Description 用户服务接口，定义用户相关业务操作方法
  * @Author lihongliang
  * @Date 2025/9/21 11:02
  * @Version 1.0
  */
-public interface UserService extends IService<User>, UserDetailsService {
+public interface IUserService extends IService<User>, UserDetailsService {
 
     /**
      * 用户登录方法

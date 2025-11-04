@@ -2,13 +2,10 @@ package com.lee.oa.config.security.component;
 
 import com.lee.oa.pojo.Menu;
 import com.lee.oa.pojo.Role;
-import com.lee.oa.service.MenuService;
+import com.lee.oa.service.IMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 import org.springframework.stereotype.Component;
@@ -29,7 +26,7 @@ import java.util.List;
 public class CustomFilter implements FilterInvocationSecurityMetadataSource {
 
     @Autowired
-    private MenuService menuService;
+    private IMenuService menuService;
 
     AntPathMatcher antPathMatcher = new AntPathMatcher();
 

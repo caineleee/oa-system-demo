@@ -3,7 +3,7 @@ package com.lee.oa.controller;
 import com.lee.oa.pojo.LoginInfo;
 import com.lee.oa.pojo.Response;
 import com.lee.oa.pojo.User;
-import com.lee.oa.service.UserService;
+import com.lee.oa.service.IUserService;
 //import io.swagger.annotations.Api;
 //import io.swagger.annotations.ApiOperation;
 import io.swagger.v3.oas.annotations.Operation;
@@ -30,7 +30,7 @@ import java.security.Principal;
 public class LoginController {
 
     @Autowired
-    private UserService userService;
+    private IUserService userService;
 
     /**
      * 用户登录接口

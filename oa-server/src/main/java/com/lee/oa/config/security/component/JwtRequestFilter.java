@@ -1,6 +1,6 @@
 package com.lee.oa.config.security.component;
 
-import com.lee.oa.service.UserService;
+import com.lee.oa.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -27,7 +27,7 @@ import java.io.IOException;
 public class JwtRequestFilter extends OncePerRequestFilter {
 
     @Autowired
-    private UserService userService;
+    private IUserService userService;
 
     /**
      * JWT工具类，用于Token验证和解析

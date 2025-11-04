@@ -6,13 +6,13 @@ import com.lee.oa.pojo.Menu;
 import java.util.List;
 
 /**
- * @ClassName MenuService
+ * @ClassName IMenuService
  * @Description 菜单服务接口, 定义菜单相关业务操作方法
  * @Author lihongliang
  * @Date 2025/9/28 11:14
  * @Version 1.0
  */
-public interface MenuService extends IService<Menu> {
+public interface IMenuService extends IService<Menu> {
 
     /**
      * 获取当前用户菜单
@@ -25,4 +25,6 @@ public interface MenuService extends IService<Menu> {
      * @return 当前角色可以访问的菜单列表
      */
     List<Menu> getMenusWithRole();
+
+    List<Menu> getAllMenus();
 }

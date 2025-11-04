@@ -8,7 +8,7 @@ import com.lee.oa.mapper.UserMapper;
 import com.lee.oa.pojo.Response;
 import com.lee.oa.pojo.Role;
 import com.lee.oa.pojo.User;
-import com.lee.oa.service.UserService;
+import com.lee.oa.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,14 +23,14 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @ClassName UserServiceImpl
+ * @ClassName IUserServiceImpl
  * @Description 用户登录逻辑实现类，负责处理用户登录、认证和JWT Token生成
  * @Author lihongliang
  * @Date 2025/9/21 11:06
  * @Version 1.0
  */
 @Service
-public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService {
+public class IUserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
 
     /**
      * 用户Mapper对象，用于数据库操作

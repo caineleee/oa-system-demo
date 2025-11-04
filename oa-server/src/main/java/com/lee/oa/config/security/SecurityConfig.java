@@ -6,7 +6,7 @@ import com.lee.oa.config.security.component.JwtRequestFilter;
 import com.lee.oa.config.security.component.RestAccessDeniedHandler;
 import com.lee.oa.config.security.component.RestAuthorizationEntryPoint;
 import com.lee.oa.pojo.User;
-import com.lee.oa.service.UserService;
+import com.lee.oa.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -52,7 +52,7 @@ public class SecurityConfig {
      * 用户详情服务实现类，用于加载用户信息
      */
     @Autowired
-    private UserService userService;
+    private IUserService IUserService;
 
     /**
      * JWT请求过滤器，用于验证JWT Token并设置用户认证信息
@@ -80,10 +80,10 @@ public class SecurityConfig {
     public UserDetailsService userDetailsService() {
         return username -> {
             // 从数据库或其他地方加载用户
-            User user = (User) userService.loadUserByUsername(username);
+            User user = (User) IUserService.loadUserByUsername(username);
             if (user != null) {
                 // 加载用户角色信息
-                user.setRoles(userService.getRoles(user.getId().intValue()));
+                user.setRoles(IUserService.getRoles(user.getId().intValue()));
                 return user;
             }
             throw new UsernameNotFoundException("用户或密码不正确");
