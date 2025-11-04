@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 import Login from '@/components/Login.vue';
 import Home from '@/components/Home.vue';
+import BasicInformationSettings from '@/views/BasicInformationSettings.vue'
 
 // 动态导入组件的函数
 const loadView = (view) => {
@@ -23,6 +24,14 @@ export const constantRoutes = [
   {
     path: '/home',
     component: Home,
+    children: [
+      {
+        path: '/sys/basic',
+        name: '基础信息设置',
+        component: BasicInformationSettings,
+        meta: { title: '基础信息设置' }
+      }
+    ]
   },
 ];
 

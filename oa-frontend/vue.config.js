@@ -52,6 +52,13 @@ module.exports = {
         changeOrigin: true,
         secure: false,
         logLevel: 'debug'
+      },
+      // 基于系统的基本接口代理
+      '/system/basic': {
+        target: 'http://localhost:8081',
+        changeOrigin: true,
+        secure: false,
+        logLevel: 'debug'
       }
     }
   }
