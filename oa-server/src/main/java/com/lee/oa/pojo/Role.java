@@ -23,7 +23,7 @@ import java.io.Serializable;
 @EqualsAndHashCode(callSuper = false)
 @TableName("t_role")
 //@ApiModel("角色")
-@Schema(name = "角色", description = "角色信息实体类")
+@Schema(name = "Role", description = "角色信息实体类")
 public class Role implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -32,7 +32,7 @@ public class Role implements Serializable {
      * 角色ID，主键，自增
      */
     //@ApiModelProperty("角色ID")
-    @Schema(name = "角色ID", description = "角色ID，主键，自增")
+    @Schema(description = "角色ID，主键，自增")
     @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
@@ -40,7 +40,7 @@ public class Role implements Serializable {
      * 角色名称
      */
     //@ApiModelProperty("角色名称")
-    @Schema(name = "角色名称", description = "角色名称")
+    @Schema(description = "角色名称")
     @TableField(value = "name")
     private String name;
 
@@ -48,7 +48,7 @@ public class Role implements Serializable {
      * 角色名称（中文）
      */
     //@ApiModelProperty("角色名称（中文）")
-    @Schema(name = "角色名称（中文）", description = "角色名称（中文）")
+    @Schema(description = "角色名称（中文）")
     @TableField(value = "name_zh")
     private String nameZh;
 
@@ -56,7 +56,7 @@ public class Role implements Serializable {
      * 是否启用
      */
     //@ApiModelProperty("是否启用")
-    @Schema(name = "是否启用", description = "是否启用")
+    @Schema(description = "是否启用")
     @TableField(value = "enabled")
     private Boolean enabled = true;
 }

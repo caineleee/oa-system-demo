@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -20,20 +21,20 @@ import java.time.LocalDateTime;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @TableName("t_position")
-@Schema(name = "职位", description = "职位信息实体类")
-public class Position {
+@Schema(name = "Position", description = "职位信息实体类")
+public class Position implements Serializable {
 
-    @Schema(name = "id", description = "职位ID")
+    @Schema(description = "职位ID")
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
 
-    @Schema(name = "name", description = "职位名称")
+    @Schema(description = "职位名称")
     private String name;
 
-    @Schema(name = "createDate", description = "创建时间")
+    @Schema(description = "创建时间")
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime createDate;
 
-    @Schema(name = "enabled", description = "是否启用")
+    @Schema(description = "是否启用")
     private Boolean enabled;
 }

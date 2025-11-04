@@ -13,26 +13,26 @@ import java.io.Serializable;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Schema(name = "响应结果", description = "统一响应结果封装类")
+@Schema(name = "Response", description = "统一响应结果封装类")
 public class Response implements Serializable {
 
 //    private static final long serialVersionUID = -8091879091924046844L;
     /**
      * 响应状态码，200表示成功，500表示失败
      */
-    @Schema(name = "状态码", description = "响应状态码，200表示成功，500表示失败")
+    @Schema(description = "响应状态码，200表示成功，500表示失败")
     private long code;
     
     /**
      * 响应消息，描述操作结果
      */
-    @Schema(name = "消息", description = "响应消息，描述操作结果")
+    @Schema(description = "响应消息，描述操作结果")
     private String message;
     
     /**
      * 响应数据，包含具体的业务数据
      */
-    @Schema(name = "数据", description = "响应数据，包含具体的业务数据")
+    @Schema(description = "响应数据，包含具体的业务数据")
     private Object data;
 //    private String jwt;
 

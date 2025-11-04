@@ -10,6 +10,8 @@ import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
 
+import java.io.Serializable;
+
 /**
  * @ClassName LoginInfo
  * @Description 用户登录信息实体类，用于接收前端传递的登录参数
@@ -23,28 +25,28 @@ import lombok.experimental.Accessors;
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
 //@ApiModel(value = "用户登录实体类" )
-@Schema(name = "用户登录实体类", description = "用于接收前端传递的登录参数")
+@Schema(name = "LoginInfo", description = "用于接收前端传递的登录参数")
 @TableName("t_user")
-public class LoginInfo {
+public class LoginInfo implements Serializable {
 
     /**
      * 用户名，用于用户身份识别
      */
     //@ApiModelProperty(value = "用户名", required = true)
-    @Schema(name = "用户名", description = "用户名，用于用户身份识别", required = true)
+    @Schema(description = "用户名，用于用户身份识别", required = true)
     private String username;
     
     /**
      * 密码，用于用户身份验证
      */
     //@ApiModelProperty(value = "密码", required = true)
-    @Schema(name = "密码", description = "密码，用于用户身份验证", required = true)
+    @Schema(description = "密码，用于用户身份验证", required = true)
     private String password;
     
     /**
      * 验证码，用于防止机器人登录
      */
     //@ApiModelProperty(value = "验证码", required = true)
-    @Schema(name = "验证码", description = "验证码，用于防止机器人登录", required = true)
+    @Schema(description = "验证码，用于防止机器人登录", required = true)
     private String code;
 }

@@ -23,7 +23,7 @@ import java.time.LocalDateTime;
 @Accessors(chain = true)
 @EqualsAndHashCode(callSuper = false)
 @TableName("t_job_level")
-@Schema(name = "JobLevel对象实体类", description = "职称实体类")
+@Schema(name = "JobLevel", description = "职称实体类")
 public class JobLevel implements Serializable {
     @Schema(name = "id", description = "id")
     @TableId(value = "id", type = IdType.AUTO)
