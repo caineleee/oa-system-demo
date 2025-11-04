@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
+import java.util.logging.Logger;
 
 /**
  * @ClassName GlobalException
@@ -16,11 +17,16 @@ import java.sql.SQLIntegrityConstraintViolationException;
  */
 @RestControllerAdvice // 控制器的增强类, 如果出现异常并符合定义的错误处理逻辑, 则会进入此方法进行处理
 public class GlobalException {
+
+    private static final Logger logger = Logger.getLogger(GlobalException.class.getName());
+
     @ExceptionHandler(SQLException.class)
     public Response customSqlException(SQLException e) {
         if (e instanceof SQLIntegrityConstraintViolationException) {
+            logger.info("SQLIntegrityConstraintViolationException: " + e.getMessage());
             return Response.error("该数据有关联数据, 操作失败!");
         }
+        logger.info("SQLException: " + e.getMessage());
         return Response.error("数据库异常, 操作失败!");
     }
 }
