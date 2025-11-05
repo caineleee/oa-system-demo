@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.lee.oa.mapper.DepartmentMapper">
+    <resultMap id="BaseResultMap" type="com.lee.oa.pojo.Department">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="parent_id" property="parentId"/>
+        <result column="department_path" property="departmentPath"/>
+        <result column="enabled" property="enabled"/>
+        <result column="is_parent" property="isParent"/>
+    </resultMap>
+
+    <!-- MyBatis 递归查询数据
+    在 id="getAllDepartments" 语句获取数据之后, 在这里 select 属性再次指定查询方法
+    并将上一次查询的 id 再次传入指定的 sql 语句的变量, 实现递归查询, 一层层获取数据 -->
+    <resultMap id="DepartmentWithChildern" type="com.lee.oa.pojo.Department" extends="BaseResultMap">
+        <collection property="children"
+                    ofType="com.lee.oa.pojo.Department"
+                    select="com.lee.oa.mapper.DepartmentMapper.getAllDepartments"
+                    column="id"/>
+    </resultMap>
+    
+    <sql id="Base_Column_List">
+        id,
+        name,
+        parent_id,
+        department_path,
+        enabled,
+        is_parent
+    </sql>
+
+    <!-- 获取所有部门 -->
+    <select id="getAllDepartments" resultMap="DepartmentWithChildern">
+        SELECT
+        <include refid="Base_Column_List"/>
+        FROM
+        t_department
+        WHERE
+        parent_id = #{parentId}
+    </select>
+
+    <!-- 添加部门: 由于要调用存储过程(函数),所以不用 insert 标签,改用 select 标签
+     statementType="CALLABLE" 表示调用存储过程(函数)
+     -->
+    <select id="addDepartment" statementType="CALLABLE">
+        call AddDept(
+            #{name,mode=IN,jdbcType=VARCHAR},
+            #{parentId,mode=IN,jdbcType=INTEGER},
+            #{enabled,mode=IN,jdbcType=BOOLEAN},
+            #{result,mode=OUT,jdbcType=INTEGER},
+            #{id,mode=OUT,jdbcType=INTEGER}
+        )
+    </select>
+
+    <select id="deleteDepartment" statementType="CALLABLE">
+        call DeleteDept(
+            #{id,mode=IN,jdbcType=INTEGER},
+            #{result,mode=OUT,jdbcType=INTEGER}
+        )
+    </select>
+</mapper>
