@@ -70,8 +70,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             // 从Token中提取用户名
             String username = jwtUtil.getUsernameFromToken(jwtToken);
 
-            // Token 存在但是未登录
-            if (jwtToken != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+            // 只有当用户名存在且Token有效时才继续处理
+            if (username != null && jwtToken != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 // 根据用户名加载用户详细信息
                 UserDetails userDetails = userService.loadUserByUsername(username);
                 // 验证Token是否有效
@@ -90,7 +90,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                     SecurityContextHolder.getContext().setAuthentication(authToken);
                 }
             }
-
         }
         // 继续执行过滤器链
         chain.doFilter(request, response);

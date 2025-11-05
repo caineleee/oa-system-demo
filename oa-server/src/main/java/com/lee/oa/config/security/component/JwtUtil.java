@@ -3,6 +3,8 @@ package com.lee.oa.config.security.component;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -15,6 +17,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
+
 /**
  * JWT工具类，用于处理JWT令牌的生成和验证
  * 
@@ -24,6 +27,7 @@ import java.util.function.Function;
 @Component
 public class JwtUtil implements Serializable {
 
+    private static final Logger logger = LoggerFactory.getLogger(JwtUtil.class);
 
     private static final String CLAIM_KEY_USERNAME = "sub";
     private static final String CLAIM_KEY_CREATED = "created";
@@ -179,6 +183,10 @@ public class JwtUtil implements Serializable {
         initSignKey();
         // 从令牌中获取所有声明
         Claims claims = getAllClaimsFromToken(token);
+        // 如果claims为null，直接返回null
+        if (claims == null) {
+            return null;
+        }
         // 应用解析器函数并返回结果
         return claimsResolver.apply(claims);
     }
@@ -195,16 +203,22 @@ public class JwtUtil implements Serializable {
             return null;
         }
         initSignKey();
-        // 创建JWT解析器构建器
-        return Jwts.parserBuilder()
-                // 设置签名密钥
-                .setSigningKey(signKey)
-                // 构建解析器
-                .build()
-                // 解析JWT令牌并获取载荷
-                .parseClaimsJws(token)
-                // 获取载荷内容
-                .getBody();
+        try {
+            // 创建JWT解析器构建器
+            return Jwts.parserBuilder()
+                    // 设置签名密钥
+                    .setSigningKey(signKey)
+                    // 构建解析器
+                    .build()
+                    // 解析JWT令牌并获取载荷
+                    .parseClaimsJws(token)
+                    // 获取载荷内容
+                    .getBody();
+        } catch (Exception e) {
+            logger.warn("JWT Token解析错误 ", e);
+            return null;
+        }
+
     }
 
     /**
