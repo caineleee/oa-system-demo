@@ -51,4 +51,12 @@ public interface IUserService extends IService<User>, UserDetailsService {
      * @return 操作员列表
      */
     List<User> getAdmins(String keywords);
+
+    /**
+     * 添加操作员角色
+     * @param userId 用户 ID
+     * @param roleIds 角色 ID 列表
+     * @return 更新结果
+     */
+    String AddUserRoles(Integer userId, List<Integer> roleIds);
 }

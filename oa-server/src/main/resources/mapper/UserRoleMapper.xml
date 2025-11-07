@@ -1,4 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.lee.oa.mapper.UserRoleMapper">
+    <resultMap id="BaseResultMap" type="com.lee.oa.pojo.UserRole">
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="role_id" property="roleId"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, user_id, role_id
+    </sql>
+
+    <!-- 更新操作员角色  -->
+    <update id="AddUserRoles">
+        insert into t_user_role (user_id, role_id) values
+        <foreach collection="roleIds" item="roleId" separator=",">
+            (#{userId}, #{roleId})
+        </foreach>
+    </update>
 </mapper>

@@ -5,9 +5,11 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lee.oa.config.security.component.JwtUtil;
 import com.lee.oa.mapper.RoleMapper;
 import com.lee.oa.mapper.UserMapper;
+import com.lee.oa.mapper.UserRoleMapper;
 import com.lee.oa.pojo.Response;
 import com.lee.oa.pojo.Role;
 import com.lee.oa.pojo.User;
+import com.lee.oa.pojo.UserRole;
 import com.lee.oa.service.IUserService;
 import com.lee.oa.util.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +20,12 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * @ClassName UserServiceImpl
@@ -46,6 +50,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     private RoleMapper roleMapper;
 
     /**
+     * 用户角色Mapper对象，用于数据库操作
+     */
+    @Autowired
+    private UserRoleMapper userRoleMapper;
+
+    /**
      * JWT 工具类对象，用于生成和验证JWT Token
      */
     @Autowired
@@ -56,6 +66,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
      */
     @Value("${jwt.token-start}")
     private String tokenStart;
+
 
     /**
      * 用户登录验证并生成JWT Token
@@ -144,5 +155,22 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IU
     @Override
     public List<User> getAdmins(String keywords) {
         return userMapper.getAdmins(UserUtil.getCurrentUser().getId(), keywords);
+    }
+
+    /**
+     * 添加管理员角色
+     * @param userId 管理员ID
+     * @param roleIds 角色ID列表
+     * @return 更新结果信息
+     */
+    @Override
+    @Transactional
+    public String AddUserRoles(Integer userId, List<Integer> roleIds) {
+        userRoleMapper.delete(new QueryWrapper<UserRole>().eq("user_id", userId));
+        Integer result = userRoleMapper.AddUserRoles(userId, roleIds);
+        if (result == roleIds.size()) {
+            return "更新成功";
+        }
+        return "更新失败";
     }
 }

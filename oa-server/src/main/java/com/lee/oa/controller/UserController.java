@@ -2,6 +2,7 @@ package com.lee.oa.controller;
 
 import com.lee.oa.pojo.Response;
 import com.lee.oa.pojo.User;
+import com.lee.oa.service.IRoleService;
 import com.lee.oa.service.IUserService;
 import com.lee.oa.util.BeanUtil;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @ClassName UserController
@@ -33,10 +35,16 @@ public class UserController {
     @Autowired
     private IUserService userService;
 
+    @Autowired
+    private IRoleService roleService;
+
     @Operation(summary = "获取操作员列表")
     @GetMapping("/")
     public Response getAdminList(@RequestParam String keywords) {
-        List<User> admins = userService.getAdmins(keywords);
+        List<User> admins = userService.getAdmins(keywords)
+                .stream()
+                .map(user -> user.setPassword(null))
+                .collect(Collectors.toList());
         return Response.success("success", admins);
     }
 
@@ -58,4 +66,19 @@ public class UserController {
         boolean result = userService.removeById(id);
         return result ? Response.success("删除成功") : Response.error("删除失败");
     }
+
+
+    @Operation(summary = "获取所有角色")
+    @GetMapping("/roles")
+    public Response getAllRoles() {
+        return Response.success("success", roleService.list());
+    }
+
+    @Operation(summary = "更新操作员角色")
+    @PutMapping("/roles")
+    public Response updateAdminRoles(@RequestParam Integer userId, @RequestParam List<Integer> roleIds) {
+        String result = userService.AddUserRoles(userId, roleIds);
+        return Response.success(result);
+    }
+
 }
