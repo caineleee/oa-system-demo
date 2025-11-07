@@ -9,6 +9,7 @@ import com.lee.oa.pojo.Response;
 import com.lee.oa.pojo.Role;
 import com.lee.oa.pojo.User;
 import com.lee.oa.service.IUserService;
+import com.lee.oa.util.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,14 +24,14 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @ClassName IUserServiceImpl
+ * @ClassName UserServiceImpl
  * @Description 用户登录逻辑实现类，负责处理用户登录、认证和JWT Token生成
  * @Author lihongliang
  * @Date 2025/9/21 11:06
  * @Version 1.0
  */
 @Service
-public class IUserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
+public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements IUserService {
 
     /**
      * 用户Mapper对象，用于数据库操作
@@ -133,5 +134,15 @@ public class IUserServiceImpl extends ServiceImpl<UserMapper, User> implements I
     @Override
     public List<Role> getRoles(Integer userId) {
         return roleMapper.getRoles(userId);
+    }
+
+    /**
+     * 获取所有管理员 List
+     * @param keywords 关键字
+     * @return 管理员用户列表
+     */
+    @Override
+    public List<User> getAdmins(String keywords) {
+        return userMapper.getAdmins(UserUtil.getCurrentUser().getId(), keywords);
     }
 }

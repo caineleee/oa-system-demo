@@ -3,26 +3,25 @@ package com.lee.oa.service.Impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.lee.oa.mapper.MenuMapper;
 import com.lee.oa.pojo.Menu;
-import com.lee.oa.pojo.User;
 import com.lee.oa.service.IMenuService;
+import com.lee.oa.util.UserUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
 /**
- * @ClassName IMenuServiceImpl
+ * @ClassName MenuServiceImpl
  * @Description 菜单服务接口, 定义菜单相关业务操作方法
  * @Author lihongliang
  * @Date 2025/9/28 11:19
  * @Version 1.0
  */
 @Service
-public class IMenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IMenuService {
+public class MenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements IMenuService {
 
     @Autowired
     private MenuMapper menuMapper;
@@ -36,7 +35,7 @@ public class IMenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements I
      */
     @Override
     public List<Menu> getMenusByUserId() {
-        Long userId =  ((User) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getId();
+        Long userId =  UserUtil.getCurrentUser().getId();
         ValueOperations<String, Object> valueOperations = redisTemplate.opsForValue();
         // 从 redis 获取菜单数据
         List<Menu> menus = (List<Menu>) valueOperations.get("menu_" + userId);
@@ -59,6 +58,10 @@ public class IMenuServiceImpl extends ServiceImpl<MenuMapper, Menu> implements I
         return menuMapper.getMenusWithRole();
     }
 
+    /**
+     * 获取所有菜单
+     * @return 菜单列表
+     */
     @Override
     public List<Menu> getAllMenus() {
         return menuMapper.getAllMenus();

@@ -8,7 +8,9 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 //import io.swagger.annotations.ApiModel;
 //import io.swagger.annotations.ApiModelProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.AccessLevel;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import lombok.experimental.Accessors;
@@ -106,6 +108,7 @@ public class User implements Serializable, UserDetails {
     //@ApiModelProperty("是否禁用，true：启用，false：禁用")
     @Schema(description = "是否可用，true：启用，false：禁用")
     @TableField(value = "enabled")
+    @Getter(AccessLevel.NONE) // 表示该字段不生成getter方法, 否则与 UserDetails中的getEnabled方法冲突
     private Boolean enabled;
 
     /**

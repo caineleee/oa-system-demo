@@ -1,6 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.lee.oa.mapper.UserMapper">
+    <resultMap id="BaseResultMap" type="com.lee.oa.pojo.User">
+        <id column="id" property="id"/>
+        <result column="username" property="username"/>
+        <result column="password" property="password"/>
+        <result column="name" property="name"/>
+        <result column="email" property="email"/>
+        <result column="phone" property="phone"/>
+        <result column="telephone" property="telephone"/>
+        <result column="address" property="address"/>
+        <result column="enabled" property="enabled"/>
+        <result column="userFace" property="userFace"/>
+        <result column="remark" property="remark"/>
+    </resultMap>
 
-
+    <resultMap id="UserWithRole" type="com.lee.oa.pojo.User" extends="BaseResultMap">
+        <collection property="roles" ofType="com.lee.oa.pojo.Role">
+            <id column="role_id" property="id"/>
+            <result column="role_name" property="name"/>
+            <result column="role_name_zh" property="nameZh"/>
+        </collection>
+    </resultMap>
+    <select id="getAdmins" resultMap="UserWithRole">
+        SELECT
+            u.*,
+            r.id AS role_id,
+            r.name AS role_name,
+            r.name_zh AS role_name_zh
+        FROM
+            t_user as u
+        LEFT JOIN t_user_role as ur ON u.id = ur.user_id
+        LEFT JOIN t_role as r ON ur.role_id = r.id
+        WHERE
+            u.id != #{id}
+        <if test="keywords != null and '' != keywords">
+            AND u.name LIKE CONCAT('%', #{keywords}, '%')
+        </if>
+        AND u.name LIKE CONCAT('%', #{keywords}, '%')
+        ORDER BY u.id;
+    </select>
 </mapper>

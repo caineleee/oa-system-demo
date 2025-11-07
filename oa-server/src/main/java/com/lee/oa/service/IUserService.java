@@ -45,4 +45,10 @@ public interface IUserService extends IService<User>, UserDetailsService {
      */
     List<Role> getRoles(Integer userId);
 
+    /**
+     * 获取所有操作员
+     * @param keywords 关键字
+     * @return 操作员列表
+     */
+    List<User> getAdmins(String keywords);
 }
