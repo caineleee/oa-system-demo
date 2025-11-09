@@ -104,29 +104,29 @@
             LEFT JOIN t_politics_status as pol ON emp.politic_id = pol.id
             LEFT JOIN t_job_level as job ON emp.job_level_id = job.id
             LEFT JOIN t_position as pos ON emp.position_id = pos.id
-        WHERE
-            1=1
-        <if test="employee.name != null and employee.name != ''">
-            AND emp.name LIKE CONCAT('%', #{name}, '%')
-        </if>
-        <if test="employee.positionId != null">
-            AND emp.position_id = #{employee.positionId}
-        </if>
-        <if test="employee.departmentId != null">
-            AND emp.department_id = #{employee.departmentId}
-        </if>
-        <if test="employee.jobLevelId != null">
-            AND emp.job_level_id = #{employee.jobLevelId}
-        </if>
-        <if test="employee.nationId != null">
-            AND emp.nation_id = #{employee.nationId}
-        </if>
-        <if test="employee.engageForm != null">
-            AND emp.engage_form = #{employee.engage_form}
-        </if>
-        <if test="beginDateScope != null and beginDateScope.length == 2">
-            AND emp.begin_date BETWEEN #{beginDateScope[0]} AND #{beginDateScope[1]}
-        </if>
-        ORDER BY emp.id;
+        <where>
+            <if test="employee.name != null and employee.name != ''">
+                AND emp.name LIKE CONCAT('%', #{employee.name}, '%')
+            </if>
+            <if test="employee.positionId != null">
+                AND emp.position_id = #{employee.positionId}
+            </if>
+            <if test="employee.departmentId != null">
+                AND emp.department_id = #{employee.departmentId}
+            </if>
+            <if test="employee.jobLevelId != null">
+                AND emp.job_level_id = #{employee.jobLevelId}
+            </if>
+            <if test="employee.nationId != null">
+                AND emp.nation_id = #{employee.nationId}
+            </if>
+            <if test="employee.engageForm != null">
+                AND emp.engage_form = #{employee.engageForm}
+            </if>
+            <if test="beginDateScope != null and beginDateScope.length == 2">
+                AND emp.begin_date BETWEEN #{beginDateScope[0]} AND #{beginDateScope[1]}
+            </if>
+        </where>
+        ORDER BY emp.id
     </select>
 </mapper>
