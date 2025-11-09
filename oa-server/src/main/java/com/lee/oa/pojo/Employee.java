@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -38,6 +39,7 @@ public class Employee implements Serializable {
 
     @Schema(description = "出生日期")
     @TableField(value = "birthday")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private LocalDateTime birthday;
 
     @Schema(description = "身份证号")
@@ -84,7 +86,11 @@ public class Employee implements Serializable {
     @TableField(value = "job_level_id")
     private Integer jobLevelId;
 
-    @Schema(description = "学历专业ID")
+    @Schema(description = "聘用形式")
+    @TableField(value = "engage_form")
+    private String engageForm;
+
+    @Schema(description = "最高学历")
     @TableField(value = "tiptop_degree")
     private String tiptopDegree;
 
@@ -94,6 +100,7 @@ public class Employee implements Serializable {
 
     @Schema(description = "入职日期")
     @TableField(value = "begin_date")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private LocalDateTime beginDate;
 
     @Schema(description = "在职状态")
@@ -110,18 +117,22 @@ public class Employee implements Serializable {
 
     @Schema(description = "转正日期")
     @TableField(value = "conversion_time")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private LocalDateTime conversionTime;
 
     @Schema(description = "离职日期")
     @TableField(value = "discharge_date")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private LocalDateTime dischargeDate;
 
     @Schema(description = "合同起始日期")
     @TableField(value = "begin_contract")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private LocalDateTime beginContract;
 
     @Schema(description = "合同终止日期")
     @TableField(value = "end_contract")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "GMT+8")
     private LocalDateTime endContract;
 
     @Schema(description = "工龄")
@@ -131,4 +142,26 @@ public class Employee implements Serializable {
     @Schema(description = "工资ID")
     @TableField(value = "salary_id")
     private Integer salaryId;
+
+    @Schema(description = "民族")
+    @TableField(exist = false)
+    private Nation nation;
+
+    @Schema(description = "政治面貌")
+    @TableField(exist = false)
+    private PoliticsStatus politicsStatus;
+
+    @Schema(description = "部门")
+    @TableField(exist = false)
+    private Department department;
+
+    @Schema(description = "职位")
+    @TableField(exist = false)
+    private Position position;
+
+    @Schema(description = "职称")
+    @TableField(exist = false)
+    private JobLevel jobLevel;
+
+
 }

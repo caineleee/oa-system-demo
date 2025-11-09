@@ -1,4 +1,132 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.lee.oa.mapper.EmployeeMapper">
+    <resultMap id="BaseResultMap" type="com.lee.oa.pojo.Employee">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="gender" property="gender"/>
+        <result column="birthday" property="birthday"/>
+        <result column="id_card" property="idCard"/>
+        <result column="wed_lock" property="wedlock"/>
+        <result column="nation_id" property="nationId"/>
+        <result column="native_place" property="nativePlace"/>
+        <result column="politic_id" property="politicId"/>
+        <result column="email" property="email"/>
+        <result column="phone" property="phone"/>
+        <result column="address" property="address"/>
+        <result column="department_id" property="departmentId"/>
+        <result column="position_id" property="positionId"/>
+        <result column="job_level_id" property="jobLevelId"/>
+        <result column="tiptop_degree" property="tiptopDegree"/>
+        <result column="school" property="school"/>
+        <result column="begin_date" property="beginDate"/>
+        <result column="work_state" property="workState"/>
+        <result column="work_id" property="workId"/>
+        <result column="contract_term" property="contractTerm"/>
+        <result column="conversion_time" property="conversionTime"/>
+        <result column="discharge_date" property="dischargeDate"/>
+        <result column="begin_contract" property="beginContract"/>
+        <result column="end_contract" property="endContract"/>
+        <result column="working_years" property="workingYears"/>
+        <result column="salary_id" property="salaryId"/>
+    </resultMap>
+
+    <resultMap id="EmployeeInfo" type="com.lee.oa.pojo.Employee" extends="BaseResultMap">
+        <association property="nation" javaType="com.lee.oa.pojo.Nation">
+            <result column="nation_id" property="id"/>
+            <result column="nation_name" property="name"/>
+        </association>
+        <association property="politicsStatus" javaType="com.lee.oa.pojo.PoliticsStatus">
+            <result column="politic_id" property="id"/>
+            <result column="politic_name" property="name"/>
+        </association>
+        <association property="department" javaType="com.lee.oa.pojo.Department">
+            <result column="department_id" property="id"/>
+            <result column="department_name" property="name"/>
+        </association>
+        <association property="position" javaType="com.lee.oa.pojo.Position">
+            <result column="position_id" property="id"/>
+            <result column="position_name" property="name"/>
+        </association>
+        <association property="jobLevel" javaType="com.lee.oa.pojo.JobLevel">
+            <result column="job_level_id" property="id"/>
+            <result column="job_level_name" property="name"/>
+        </association>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id, name, gender, birthday, id_card, wed_lock, nation_id, native_place, politic_id, email, phone, address,
+        department_id, position_id, job_level_id, tiptop_degree, school, begin_date, work_state, work_id, contract_term,
+        conversion_time, discharge_date, begin_contract, end_contract, working_years, salary_id
+    </sql>
+
+    <!-- 获取员工列表(分页) -->
+    <select id="getEmployeesByPage" resultMap="EmployeeInfo">
+        SELECT
+            emp.id,
+            emp.name,
+            emp.gender,
+            emp.birthday,
+            emp.id_card,
+            emp.wed_lock,
+            emp.nation_id,
+            emp.native_place,
+            emp.politic_id,
+            emp.email,
+            emp.phone,
+            emp.address,
+            emp.department_id,
+            emp.job_level_id,
+            emp.position_id,
+            emp.engage_form,
+            emp.tiptop_degree,
+            emp.specialty,
+            emp.school,
+            emp.begin_date,
+            emp.work_state,
+            emp.work_id,
+            emp.conversion_time,
+            emp.discharge_date,
+            emp.contract_term,
+            emp.begin_contract,
+            emp.end_contract,
+            emp.working_years,
+            emp.salary_id,
+            dep.name as department_name,
+            nat.name as nation_name,
+            pol.name as politics_name,
+            job.name as job_name,
+            pos.name as position_name
+
+        FROM t_employee as emp
+            LEFT JOIN t_department as dep ON emp.department_id = dep.id
+            LEFT JOIN t_nation as nat ON emp.nation_id = nat.id
+            LEFT JOIN t_politics_status as pol ON emp.politic_id = pol.id
+            LEFT JOIN t_job_level as job ON emp.job_level_id = job.id
+            LEFT JOIN t_position as pos ON emp.position_id = pos.id
+        WHERE
+            1=1
+        <if test="employee.name != null and employee.name != ''">
+            AND emp.name LIKE CONCAT('%', #{name}, '%')
+        </if>
+        <if test="employee.positionId != null">
+            AND emp.position_id = #{employee.positionId}
+        </if>
+        <if test="employee.departmentId != null">
+            AND emp.department_id = #{employee.departmentId}
+        </if>
+        <if test="employee.jobLevelId != null">
+            AND emp.job_level_id = #{employee.jobLevelId}
+        </if>
+        <if test="employee.nationId != null">
+            AND emp.nation_id = #{employee.nationId}
+        </if>
+        <if test="employee.engageForm != null">
+            AND emp.engage_form = #{employee.engage_form}
+        </if>
+        <if test="beginDateScope != null and beginDateScope.length == 2">
+            AND emp.begin_date BETWEEN #{beginDateScope[0]} AND #{beginDateScope[1]}
+        </if>
+        ORDER BY emp.id;
+    </select>
 </mapper>
