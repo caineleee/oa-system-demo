@@ -17,6 +17,7 @@
         <result column="department_id" property="departmentId"/>
         <result column="position_id" property="positionId"/>
         <result column="job_level_id" property="jobLevelId"/>
+        <result column="engage_form" property="engageForm"/>
         <result column="tiptop_degree" property="tiptopDegree"/>
         <result column="school" property="school"/>
         <result column="begin_date" property="beginDate"/>
@@ -38,7 +39,7 @@
         </association>
         <association property="politicsStatus" javaType="com.lee.oa.pojo.PoliticsStatus">
             <result column="politic_id" property="id"/>
-            <result column="politic_name" property="name"/>
+            <result column="politic_status_name" property="name"/>
         </association>
         <association property="department" javaType="com.lee.oa.pojo.Department">
             <result column="department_id" property="id"/>
@@ -94,8 +95,8 @@
             emp.salary_id,
             dep.name as department_name,
             nat.name as nation_name,
-            pol.name as politics_name,
-            job.name as job_name,
+            pol.name as politic_status_name,
+            job.name as job_level_name,
             pos.name as position_name
 
         FROM t_employee as emp
@@ -107,6 +108,9 @@
         <where>
             <if test="employee.name != null and employee.name != ''">
                 AND emp.name LIKE CONCAT('%', #{employee.name}, '%')
+            </if>
+            <if test="employee.politicId != null">
+                AND emp.politic_id = #{employee.politicId}
             </if>
             <if test="employee.positionId != null">
                 AND emp.position_id = #{employee.positionId}
